@@ -15,7 +15,7 @@ public class DefensesSO : ScriptableObject
     public float mainCooldown;
     public float secondaryCooldown;
     public float cooldown3;
-    public enum debuffType
+    public enum DebuffType
     {
         none,
         stun,
@@ -23,6 +23,6 @@ public class DefensesSO : ScriptableObject
         poison,
         weakness
     }
-    public debuffType appliedDebuff;
+    public DebuffType appliedDebuff;
     public float appliedDebuffTime;
 }

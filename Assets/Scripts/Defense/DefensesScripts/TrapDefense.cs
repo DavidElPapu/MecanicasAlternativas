@@ -28,6 +28,8 @@ public class TrapDefense : MonoBehaviour
     private void Attack()
     {
         //realiza su ataque
+        //y aplica debuff
+        print("saque mis picos");
         mainCooldownCount = 0f;
     }
 }

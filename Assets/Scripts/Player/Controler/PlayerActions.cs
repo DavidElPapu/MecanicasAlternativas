@@ -4,7 +4,9 @@ using UnityEngine;
 public class PlayerActions : MonoBehaviour
 {
     public int defenseSlots, gunSlots;
+    public float maxBuildingRange;
     public Transform previewSpot;
+    public LayerMask mapLayer;
     public Grid mapGrid;
     public DefensesSO[] equippedDefenses = new DefensesSO[10];
     public GridData mapGridData;
@@ -52,6 +54,20 @@ public class PlayerActions : MonoBehaviour
         if (isBuilding)
         {
             MovePreview();
+            AdjustPreviewSpot();
+        }
+    }
+
+    private void AdjustPreviewSpot()
+    {
+        Vector3 rayDirection = previewSpot.position - transform.position;
+        if (Physics.Raycast(transform.position, rayDirection.normalized, out RaycastHit hit, maxBuildingRange, mapLayer, QueryTriggerInteraction.Ignore))
+        {
+            previewSpot.position = hit.point;
+        }
+        else
+        {
+            previewSpot.localPosition = new Vector3(0, 0, maxBuildingRange);
         }
     }
 
@@ -70,6 +86,7 @@ public class PlayerActions : MonoBehaviour
             return;
         defensePreviews[lastSelectionIndex].SetActive(false);
         defensePreviews[currentSelectionIndex].SetActive(true);
+        lastPreviewGridPos = mapGrid.WorldToCell(defensePreviews[currentSelectionIndex].transform.position);
     }
 
     private void ToggleDefensePreviews(bool createPreviews)
@@ -81,6 +98,7 @@ public class PlayerActions : MonoBehaviour
                 GameObject newPreview = Instantiate(equippedDefenses[i].prefab, new Vector3(0, 0, 0), defaultRotation);
                 defensePreviews[i] = newPreview;
                 newPreview.SetActive(false);
+                newPreview.GetComponent<BoxCollider>().isTrigger = true;
                 if (i == currentSelectionIndex)
                     newPreview.SetActive(true);
             }

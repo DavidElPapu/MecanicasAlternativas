@@ -316,7 +316,7 @@ GameObject:
   - component: {fileID: 330585544}
   - component: {fileID: 330585547}
   - component: {fileID: 330585548}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PlayerCamera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -746,7 +746,7 @@ GameObject:
   - component: {fileID: 969641051}
   - component: {fileID: 969641050}
   - component: {fileID: 969641049}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PlayerBody
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -853,7 +853,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1499024272}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PreviewSpot
   m_TagString: Untagged
   m_Icon: {fileID: 7422848464349959988, guid: 0000000000000000d000000000000000, type: 0}
@@ -887,7 +887,7 @@ GameObject:
   - component: {fileID: 1639009007}
   - component: {fileID: 1639009006}
   - component: {fileID: 1639009008}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -974,13 +974,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24b497cd34fa873409cde3a3a780d75e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defenseSlots: 1
+  defenseSlots: 2
   gunSlots: 0
+  maxBuildingRange: 5
   previewSpot: {fileID: 1499024272}
+  mapLayer:
+    serializedVersion: 2
+    m_Bits: 1
   mapGrid: {fileID: 221009768}
   equippedDefenses:
   - {fileID: 11400000, guid: 14e3c36c1f952d249b68180b73ce76af, type: 2}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 3b44ee68c67875e428961196c1724eda, type: 2}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
