@@ -823,6 +823,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   groundValidDefenseIndicatorsParent: {fileID: 1358214013}
+  wallValidDefenseIndicatorParent: {fileID: 0}
+  ceilingValidDefenseIndicatorParent: {fileID: 0}
   mapGrid: {fileID: 221009768}
 --- !u!4 &595184424
 Transform:

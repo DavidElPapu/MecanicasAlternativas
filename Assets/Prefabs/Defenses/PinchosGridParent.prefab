@@ -653,7 +653,6 @@ GameObject:
   m_Component:
   - component: {fileID: 807886894223647553}
   - component: {fileID: 976964444444876116}
-  - component: {fileID: -4518416131688625797}
   m_Layer: 0
   m_Name: PinchosGridParent
   m_TagString: Untagged
@@ -689,20 +688,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f0a3f44b14eac849a9fa36b9794bb9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  generalDefenseScript: {fileID: -4518416131688625797}
-  detectionRange: {fileID: 5495180645430643559}
   defenseSO: {fileID: 11400000, guid: 3b44ee68c67875e428961196c1724eda, type: 2}
---- !u!114 &-4518416131688625797
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7114210511905106021}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7eaee8fc71e4d434a84150ca77e2e935, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   defenseModel: {fileID: 2336433594113298065}
   previewMAT: {fileID: 2100000, guid: bd376cb7de31ebf49a897a3fa73252da, type: 2}

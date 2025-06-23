@@ -149,7 +149,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8159042345338174699}
-  - component: {fileID: -9170170379699244465}
+  - component: {fileID: 2832086341556324261}
   m_Layer: 0
   m_Name: TestDefenseGridParent
   m_TagString: Untagged
@@ -173,7 +173,7 @@ Transform:
   - {fileID: 2982272599180183669}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-9170170379699244465
+--- !u!114 &2832086341556324261
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -182,8 +182,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 6970351787703872529}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7eaee8fc71e4d434a84150ca77e2e935, type: 3}
+  m_Script: {fileID: 11500000, guid: 1f0a3f44b14eac849a9fa36b9794bb9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defenseSO: {fileID: 11400000, guid: 14e3c36c1f952d249b68180b73ce76af, type: 2}
   defenseModel: {fileID: 3672597695347735628}
   previewMAT: {fileID: 2100000, guid: bd376cb7de31ebf49a897a3fa73252da, type: 2}

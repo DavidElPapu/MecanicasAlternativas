@@ -68,13 +68,21 @@ public class PlayerActions : MonoBehaviour
         switch (cellState)
         {
             case ObjectData.CellState.Unavailable:
-                defensePreviews[currentSelectionIndex].GetComponent<GeneralDefenseScript>().ChangeModelMaterials(Color.red);
+                //defensePreviews[currentSelectionIndex].GetComponent<GeneralDefenseScript>().ChangeModelMaterials(Color.red);
+                defensePreviews[currentSelectionIndex].GetComponent<DefenseClass>().ChangeModelMaterials(Color.red);
                 break;
             case ObjectData.CellState.Defese:
                 break;
             case ObjectData.CellState.GroundAvailable:
-                defensePreviews[currentSelectionIndex].GetComponent<GeneralDefenseScript>().ChangeModelMaterials(Color.green);
-                break;
+                if(defensePreviews[currentSelectionIndex].GetComponent<DefenseClass>().defenseSO.validCells.Contains(cellState))
+                {
+                    defensePreviews[currentSelectionIndex].GetComponent<DefenseClass>().ChangeModelMaterials(Color.green);
+                }
+                else
+                {
+                    defensePreviews[currentSelectionIndex].GetComponent<DefenseClass>().ChangeModelMaterials(Color.red);
+                }
+                    break;
             case ObjectData.CellState.CeilingAvailable:
                 break;
             case ObjectData.CellState.WallAvailable:

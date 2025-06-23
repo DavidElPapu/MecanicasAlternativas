@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class MapGridDataManager : MonoBehaviour
 {
-    public GameObject groundValidDefenseIndicatorsParent;
+    public GameObject groundValidDefenseIndicatorsParent, wallValidDefenseIndicatorParent, ceilingValidDefenseIndicatorParent;
     public Grid mapGrid;
     public GridData mapGridData = new GridData();
 
@@ -27,6 +27,18 @@ public class MapGridDataManager : MonoBehaviour
             Transform childOfChild = child.GetChild(0);
             Vector3Int areaSize = new Vector3Int(Mathf.FloorToInt(childOfChild.localScale.x), Mathf.FloorToInt(childOfChild.localScale.y), Mathf.FloorToInt(childOfChild.localScale.z));
             mapGridData.AddObjectAt(mapGrid.WorldToCell(child.transform.position), areaSize, ObjectData.CellState.GroundAvailable, child.gameObject);
+        }
+        foreach (Transform child in wallValidDefenseIndicatorParent.transform)
+        {
+            Transform childOfChild = child.GetChild(0);
+            Vector3Int areaSize = new Vector3Int(Mathf.FloorToInt(childOfChild.localScale.x), Mathf.FloorToInt(childOfChild.localScale.y), Mathf.FloorToInt(childOfChild.localScale.z));
+            mapGridData.AddObjectAt(mapGrid.WorldToCell(child.transform.position), areaSize, ObjectData.CellState.WallAvailable, child.gameObject);
+        }
+        foreach (Transform child in ceilingValidDefenseIndicatorParent.transform)
+        {
+            Transform childOfChild = child.GetChild(0);
+            Vector3Int areaSize = new Vector3Int(Mathf.FloorToInt(childOfChild.localScale.x), Mathf.FloorToInt(childOfChild.localScale.y), Mathf.FloorToInt(childOfChild.localScale.z));
+            mapGridData.AddObjectAt(mapGrid.WorldToCell(child.transform.position), areaSize, ObjectData.CellState.CeilingAvailable, child.gameObject);
         }
     }
 }
