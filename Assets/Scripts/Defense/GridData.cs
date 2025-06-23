@@ -15,6 +15,15 @@ public class GridData
         }
     }
 
+    public DefenseClass GetDefenseScriptAt(Vector3Int gridPos)
+    {
+        if (!objectsInGrid.ContainsKey(gridPos))
+            return null;
+        if (objectsInGrid[gridPos].objectGO.TryGetComponent<DefenseClass>(out DefenseClass defenseScript))
+            return defenseScript;
+        return null;
+    }
+
     public ObjectData.CellState GetCellStateAt(Vector3Int gridPos)
     {
         if (!objectsInGrid.ContainsKey(gridPos))

@@ -16,6 +16,15 @@ public class PlayerActions : MonoBehaviour
     private Quaternion defaultRotation = Quaternion.identity;
     private GameObject[] defensePreviews = new GameObject[10];
     private GridData mapGridData;
+    private enum DefenseAction
+    {
+        None,
+        Build,
+        Delete,
+        Upgrade,
+        Rotate
+    }
+    private DefenseAction defenseOnLeftClickAction, defenseOnRightClickAction;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -36,10 +45,10 @@ public class PlayerActions : MonoBehaviour
     {
         if (Input.GetKeyUp(KeyCode.Mouse0))
         {
-            //if(isBuilding)
-            //    //construlle
-            //    else
-            //        //dispara
+            if (isBuilding)
+                BuildOrUpgrade();
+            //else
+                    //dispara
         }
         if (Input.GetKeyUp(KeyCode.Mouse1))
         {
@@ -61,34 +70,34 @@ public class PlayerActions : MonoBehaviour
         }
     }
 
+    private void BuildOrUpgrade()
+    {
+
+    }
+
     private void ChangePreviewColor()
     {
         Vector3Int currentPreviewGridPos = mapGrid.WorldToCell(previewSpot.position);
         ObjectData.CellState cellState = mapGridData.GetCellStateAt(currentPreviewGridPos);
-        switch (cellState)
+        if(cellState == ObjectData.CellState.Unavailable)
         {
-            case ObjectData.CellState.Unavailable:
-                //defensePreviews[currentSelectionIndex].GetComponent<GeneralDefenseScript>().ChangeModelMaterials(Color.red);
+            defensePreviews[currentSelectionIndex].GetComponent<DefenseClass>().ChangeModelMaterials(Color.red);
+        }
+        else if(cellState == ObjectData.CellState.Defese)
+        {
+
+        }
+        else
+        {
+            if (defensePreviews[currentSelectionIndex].GetComponent<DefenseClass>().defenseSO.validCells.Contains(cellState))
+            {
+                //falta ver precio
+                defensePreviews[currentSelectionIndex].GetComponent<DefenseClass>().ChangeModelMaterials(Color.green);
+            }
+            else
+            {
                 defensePreviews[currentSelectionIndex].GetComponent<DefenseClass>().ChangeModelMaterials(Color.red);
-                break;
-            case ObjectData.CellState.Defese:
-                break;
-            case ObjectData.CellState.GroundAvailable:
-                if(defensePreviews[currentSelectionIndex].GetComponent<DefenseClass>().defenseSO.validCells.Contains(cellState))
-                {
-                    defensePreviews[currentSelectionIndex].GetComponent<DefenseClass>().ChangeModelMaterials(Color.green);
-                }
-                else
-                {
-                    defensePreviews[currentSelectionIndex].GetComponent<DefenseClass>().ChangeModelMaterials(Color.red);
-                }
-                    break;
-            case ObjectData.CellState.CeilingAvailable:
-                break;
-            case ObjectData.CellState.WallAvailable:
-                break;
-            default:
-                break;
+            }
         }
     }
 
