@@ -8,17 +8,19 @@ public class PlayerActions : MonoBehaviour
     public Transform previewSpot;
     public LayerMask mapLayer;
     public Grid mapGrid;
-    public DefensesSO[] equippedDefenses = new DefensesSO[10];
-    public GridData mapGridData;
+    public MapGridDataManager mapGridDataManager;
+    public GameObject[] equippedDefensesPrefabs = new GameObject[10];
     private bool isBuilding;
     private int currentSelectionIndex, lastSelectionIndex, lastGunIndex, lastDefenseIndex, currentSelectionLimit;
     private Vector3Int lastPreviewGridPos;
     private Quaternion defaultRotation = Quaternion.identity;
     private GameObject[] defensePreviews = new GameObject[10];
+    private GridData mapGridData;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        mapGridData = mapGridDataManager.mapGridData;
         isBuilding = true;
         currentSelectionLimit = defenseSlots;
         currentSelectionIndex = 0;
@@ -55,6 +57,30 @@ public class PlayerActions : MonoBehaviour
         {
             MovePreview();
             AdjustPreviewSpot();
+            ChangePreviewColor();
+        }
+    }
+
+    private void ChangePreviewColor()
+    {
+        Vector3Int currentPreviewGridPos = mapGrid.WorldToCell(previewSpot.position);
+        ObjectData.CellState cellState = mapGridData.GetCellStateAt(currentPreviewGridPos);
+        switch (cellState)
+        {
+            case ObjectData.CellState.Unavailable:
+                defensePreviews[currentSelectionIndex].GetComponent<GeneralDefenseScript>().ChangeModelMaterials(Color.red);
+                break;
+            case ObjectData.CellState.Defese:
+                break;
+            case ObjectData.CellState.GroundAvailable:
+                defensePreviews[currentSelectionIndex].GetComponent<GeneralDefenseScript>().ChangeModelMaterials(Color.green);
+                break;
+            case ObjectData.CellState.CeilingAvailable:
+                break;
+            case ObjectData.CellState.WallAvailable:
+                break;
+            default:
+                break;
         }
     }
 
@@ -95,10 +121,9 @@ public class PlayerActions : MonoBehaviour
         {
             if (createPreviews)
             {
-                GameObject newPreview = Instantiate(equippedDefenses[i].prefab, new Vector3(0, 0, 0), defaultRotation);
+                GameObject newPreview = Instantiate(equippedDefensesPrefabs[i], new Vector3(0, 0, 0), defaultRotation);
                 defensePreviews[i] = newPreview;
                 newPreview.SetActive(false);
-                newPreview.GetComponent<BoxCollider>().isTrigger = true;
                 if (i == currentSelectionIndex)
                     newPreview.SetActive(true);
             }

@@ -8,7 +8,7 @@ public class DefensesSO : ScriptableObject
     public string defenseName;
     public string description;
     public Vector3Int size = new Vector3Int(1, 1, 1);
-    public GameObject prefab;
+    public List<ObjectData.CellState> validCells = new List<ObjectData.CellState>();
     [Header("Defense Data")]
     public float damage;
     public float health;
@@ -23,6 +23,6 @@ public class DefensesSO : ScriptableObject
         poison,
         weakness
     }
-    public DebuffType appliedDebuff;
+    public List<DebuffType> appliedDebuffs = new List<DebuffType>();
     public float appliedDebuffTime;
 }

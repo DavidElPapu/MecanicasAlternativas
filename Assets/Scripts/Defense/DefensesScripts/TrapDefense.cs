@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class TrapDefense : MonoBehaviour
 {
+    public GeneralDefenseScript generalDefenseScript;
     public DetectionRangeScript detectionRange;
     public DefensesSO defenseSO;
     private float mainCooldownCount;

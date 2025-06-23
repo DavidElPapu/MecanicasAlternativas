@@ -15,4 +15,11 @@ MonoBehaviour:
   defenseName: 
   description: 
   size: {x: 1, y: 1, z: 1}
-  prefab: {fileID: 6970351787703872529, guid: c0a8c555f87d68c4daffc0b542cdb4e8, type: 3}
+  validCells: 00000000
+  damage: 0
+  health: 0
+  mainCooldown: 0
+  secondaryCooldown: 0
+  cooldown3: 0
+  appliedDebuffs: 
+  appliedDebuffTime: 0

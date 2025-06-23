@@ -267,6 +267,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2910403969906820187}
+  - component: {fileID: 7069631073268199061}
   m_Layer: 0
   m_Name: PinchosParent
   m_TagString: Untagged
@@ -296,6 +297,27 @@ Transform:
   - {fileID: 2626981097970991425}
   m_Father: {fileID: 807886894223647553}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &7069631073268199061
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2336433594113298065}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 0.1, z: 1}
+  m_Center: {x: 0, y: 0.05, z: 0}
 --- !u!1 &4268501377354896196
 GameObject:
   m_ObjectHideFlags: 0
@@ -631,7 +653,7 @@ GameObject:
   m_Component:
   - component: {fileID: 807886894223647553}
   - component: {fileID: 976964444444876116}
-  - component: {fileID: 4300266257029115602}
+  - component: {fileID: -4518416131688625797}
   m_Layer: 0
   m_Name: PinchosGridParent
   m_TagString: Untagged
@@ -667,26 +689,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f0a3f44b14eac849a9fa36b9794bb9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  generalDefenseScript: {fileID: -4518416131688625797}
   detectionRange: {fileID: 5495180645430643559}
   defenseSO: {fileID: 11400000, guid: 3b44ee68c67875e428961196c1724eda, type: 2}
---- !u!65 &4300266257029115602
-BoxCollider:
+--- !u!114 &-4518416131688625797
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7114210511905106021}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 0.1, z: 1}
-  m_Center: {x: 0.5, y: 0.05, z: 0.5}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7eaee8fc71e4d434a84150ca77e2e935, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defenseModel: {fileID: 2336433594113298065}
+  previewMAT: {fileID: 2100000, guid: bd376cb7de31ebf49a897a3fa73252da, type: 2}
