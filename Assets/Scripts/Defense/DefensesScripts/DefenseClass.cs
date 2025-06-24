@@ -2,17 +2,35 @@ using UnityEngine;
 
 public abstract class DefenseClass : MonoBehaviour
 {
-    [SerializeField] public DefensesSO defenseSO;
+    public DefensesSO defenseSO;
+    [SerializeField] protected int currentLevel;
     [SerializeField] protected GameObject defenseModel;
     [SerializeField] protected Material previewMAT;
 
-    public virtual void OnPlacing()
+    public virtual void Awake()
     {
-        ChangeModelMaterials(Color.white);
-        defenseModel.GetComponent<BoxCollider>().isTrigger = false;
+        currentLevel = 0;
     }
 
-    public abstract void OnDeleting();
+    public virtual void OnPlacing()
+    {
+        //cuando se ponga, mejor que cambie a otro material, no el preview
+        ChangeModelMaterials(Color.white);
+        defenseModel.GetComponent<BoxCollider>().isTrigger = false;
+        currentLevel = 1;
+    }
+
+    public virtual void OnDeleting()
+    {
+        Destroy(this.gameObject);
+    }
+
+    public virtual void OnUpgrading()
+    {
+        currentLevel++;
+        //Debug.Log("Subi al nivel" + currentLevel);
+    }
+
     public virtual void ChangeModelMaterials(Color color)
     {
         if (color != Color.white)
@@ -22,5 +40,10 @@ public abstract class DefenseClass : MonoBehaviour
         {
             modelPartsRenderers.material = previewMAT;
         }
+    }
+
+    public virtual int GetCurrentLevel()
+    {
+        return currentLevel;
     }
 }

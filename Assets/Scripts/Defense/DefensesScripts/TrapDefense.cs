@@ -2,18 +2,13 @@ using UnityEngine;
 
 public class TrapDefense : DefenseClass
 {
-    void Start()
+    public override void Awake()
     {
-        //Start
+        base.Awake();
     }
 
     void Update()
     {
         //Update
-    }
-
-    public override void OnDeleting()
-    {
-        throw new System.NotImplementedException();
     }
 }

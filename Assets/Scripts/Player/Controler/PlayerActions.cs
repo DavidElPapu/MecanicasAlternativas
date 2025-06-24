@@ -8,6 +8,7 @@ public class PlayerActions : MonoBehaviour
     public Transform previewSpot;
     public LayerMask mapLayer;
     public Grid mapGrid;
+    public EconomySystem economySystem;
     public MapGridDataManager mapGridDataManager;
     public GameObject[] equippedDefensesPrefabs = new GameObject[10];
     private bool isBuilding;
@@ -52,7 +53,8 @@ public class PlayerActions : MonoBehaviour
         }
         if (Input.GetKeyUp(KeyCode.Mouse1))
         {
-            //quiza habilidad secundaria de arma o rotacion de defensa
+            if (isBuilding)
+                RotateOrDelete();
         }
         if (Input.GetKeyUp(KeyCode.Q))
         {
@@ -66,38 +68,101 @@ public class PlayerActions : MonoBehaviour
         {
             MovePreview();
             AdjustPreviewSpot();
-            ChangePreviewColor();
         }
     }
 
     private void BuildOrUpgrade()
     {
+        if (defenseOnLeftClickAction == DefenseAction.None)
+            return;
+        Vector3Int currentPreviewGridPos = mapGrid.WorldToCell(previewSpot.position);
+        if (defenseOnLeftClickAction == DefenseAction.Build)
+        {
+            GameObject newDefense = Instantiate(equippedDefensesPrefabs[currentSelectionIndex], mapGrid.CellToWorld(currentPreviewGridPos), defaultRotation);
+            DefenseClass newDefenseScript = newDefense.GetComponent<DefenseClass>();
+            mapGridData.AddObjectAt(currentPreviewGridPos, newDefenseScript.defenseSO.size, ObjectData.CellState.Defese, newDefense);
+            economySystem.ChangeCurrentMoney(-newDefenseScript.defenseSO.levelPrices[newDefenseScript.GetCurrentLevel()]);
+            newDefenseScript.OnPlacing();
+        }
+        else if (defenseOnLeftClickAction == DefenseAction.Upgrade)
+        {
+            DefenseClass otherDefenseScript = mapGridData.GetDefenseScriptAt(currentPreviewGridPos);
+            economySystem.ChangeCurrentMoney(-otherDefenseScript.defenseSO.levelPrices[otherDefenseScript.GetCurrentLevel()]);
+            otherDefenseScript.OnUpgrading();
 
+        }
+        ChangePreviewColor();
+    }
+
+    private void RotateOrDelete()
+    {
+        if (defenseOnRightClickAction == DefenseAction.None)
+            return;
+        if (defenseOnRightClickAction == DefenseAction.Rotate)
+        {
+            //rotacion insana
+        }
+        else if (defenseOnRightClickAction == DefenseAction.Delete)
+        {
+            Vector3Int currentPreviewGridPos = mapGrid.WorldToCell(previewSpot.position);
+            DefenseClass otherDefenseScript = mapGridData.GetDefenseScriptAt(currentPreviewGridPos);
+            int returnCash = 0;
+            for (int i = 0; i < otherDefenseScript.GetCurrentLevel(); i++)
+            {
+                returnCash += otherDefenseScript.defenseSO.levelPrices[i];
+            }
+            mapGridData.RemoveObjectAt(currentPreviewGridPos, otherDefenseScript.defenseSO.size);
+            economySystem.ChangeCurrentMoney(returnCash);
+            otherDefenseScript.OnDeleting();
+        }
+        ChangePreviewColor();
     }
 
     private void ChangePreviewColor()
     {
         Vector3Int currentPreviewGridPos = mapGrid.WorldToCell(previewSpot.position);
-        ObjectData.CellState cellState = mapGridData.GetCellStateAt(currentPreviewGridPos);
+        DefenseClass myDefenseScript = defensePreviews[currentSelectionIndex].GetComponent<DefenseClass>();
+        ObjectData.CellState cellState = mapGridData.GetCellStateAt(currentPreviewGridPos, myDefenseScript.defenseSO.size);
+        defensePreviews[currentSelectionIndex].SetActive(true);
+        defenseOnLeftClickAction = DefenseAction.None;
+        defenseOnRightClickAction = DefenseAction.None;
         if(cellState == ObjectData.CellState.Unavailable)
-        {
-            defensePreviews[currentSelectionIndex].GetComponent<DefenseClass>().ChangeModelMaterials(Color.red);
-        }
+            myDefenseScript.ChangeModelMaterials(Color.red);
         else if(cellState == ObjectData.CellState.Defese)
         {
-
+            defensePreviews[currentSelectionIndex].SetActive(false);
+            DefenseClass otherDefenseScript = mapGridData.GetDefenseScriptAt(currentPreviewGridPos);
+            if (otherDefenseScript == null)
+                print("esto no deberia pasar");
+            if (otherDefenseScript.defenseSO.defenseName == myDefenseScript.defenseSO.defenseName)
+            {
+                if (otherDefenseScript.GetCurrentLevel() < otherDefenseScript.defenseSO.levelPrices.Count)
+                {
+                    if (economySystem.GetCurrentMoney() >= otherDefenseScript.defenseSO.levelPrices[otherDefenseScript.GetCurrentLevel()])
+                        defenseOnLeftClickAction = DefenseAction.Upgrade;
+                }
+                else
+                {
+                    //esta al nivel max
+                }
+            }
+            defenseOnRightClickAction = DefenseAction.Delete;
         }
         else
         {
-            if (defensePreviews[currentSelectionIndex].GetComponent<DefenseClass>().defenseSO.validCells.Contains(cellState))
+            if (myDefenseScript.defenseSO.validCells.Contains(cellState))
             {
-                //falta ver precio
-                defensePreviews[currentSelectionIndex].GetComponent<DefenseClass>().ChangeModelMaterials(Color.green);
+                if (economySystem.GetCurrentMoney() >= myDefenseScript.defenseSO.levelPrices[myDefenseScript.GetCurrentLevel()])
+                {
+                    myDefenseScript.ChangeModelMaterials(Color.green);
+                    defenseOnLeftClickAction = DefenseAction.Build;
+                }
+                else
+                    myDefenseScript.ChangeModelMaterials(Color.yellow);
+                defenseOnRightClickAction = DefenseAction.Rotate;
             }
             else
-            {
-                defensePreviews[currentSelectionIndex].GetComponent<DefenseClass>().ChangeModelMaterials(Color.red);
-            }
+                myDefenseScript.ChangeModelMaterials(Color.red);
         }
     }
 
@@ -121,6 +186,7 @@ public class PlayerActions : MonoBehaviour
             return;
         lastPreviewGridPos = currentPreviewGridPos;
         defensePreviews[currentSelectionIndex].transform.position = currentPreviewGridPos;
+        ChangePreviewColor();
     }
 
     private void SwitchDefensePreview()
@@ -130,6 +196,7 @@ public class PlayerActions : MonoBehaviour
         defensePreviews[lastSelectionIndex].SetActive(false);
         defensePreviews[currentSelectionIndex].SetActive(true);
         lastPreviewGridPos = mapGrid.WorldToCell(defensePreviews[currentSelectionIndex].transform.position);
+        ChangePreviewColor();
     }
 
     private void ToggleDefensePreviews(bool createPreviews)
@@ -143,6 +210,7 @@ public class PlayerActions : MonoBehaviour
                 newPreview.SetActive(false);
                 if (i == currentSelectionIndex)
                     newPreview.SetActive(true);
+                ChangePreviewColor();
             }
             else
             {
