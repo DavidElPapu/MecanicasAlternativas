@@ -854,9 +854,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d442b15d7ce44142a8c59d823e89e3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundValidDefenseIndicatorsParent: {fileID: 1358214013}
-  ceilingValidDefenseIndicatorParent: {fileID: 1739357637}
-  mapGrid: {fileID: 221009768}
 --- !u!4 &595184424
 Transform:
   m_ObjectHideFlags: 0

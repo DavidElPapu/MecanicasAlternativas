@@ -3,24 +3,9 @@ using UnityEngine;
 
 public class MapGridDataManager : MonoBehaviour
 {
-    public GameObject groundValidDefenseIndicatorsParent, ceilingValidDefenseIndicatorParent;
-    public Grid mapGrid;
     public GridData mapGridData = new GridData();
 
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        SetGridData();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    private void SetGridData()
+    public void SetGridData(Grid mapGrid, GameObject groundValidDefenseIndicatorsParent, GameObject ceilingValidDefenseIndicatorParent)
     {
         foreach (Transform child in groundValidDefenseIndicatorsParent.transform)
         {
