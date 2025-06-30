@@ -11,7 +11,7 @@ public class PlayerActions : MonoBehaviour
     public EconomySystem economySystem;
     public MapGridDataManager mapGridDataManager;
     public GameObject[] equippedDefensesPrefabs = new GameObject[10];
-    private bool isBuilding;
+    private bool isBuilding, isAlive;
     private int currentSelectionIndex, lastSelectionIndex, lastGunIndex, lastDefenseIndex, currentSelectionLimit;
     private Vector3Int lastPreviewGridPos;
     private Quaternion defaultRotation = Quaternion.identity;
@@ -30,13 +30,19 @@ public class PlayerActions : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        mapGridData = mapGridDataManager.mapGridData;
         isBuilding = true;
-        currentSelectionLimit = defenseSlots;
+        isAlive = true;
         currentSelectionIndex = 0;
+        lastSelectionIndex = -1;
         lastGunIndex = 0;
         lastDefenseIndex = 0;
+        currentSelectionLimit = defenseSlots;
         lastPreviewGridPos = new Vector3Int(0, 0, 0);
+        mapGridData = mapGridDataManager.mapGridData;
+        defenseOnLeftClickAction = DefenseAction.None;
+        defenseOnRightClickAction = DefenseAction.None;
+        PlayerStatus.PlayerDeath += OnDeath;
+        PlayerStatus.PlayerRevive += OnRevive;
         //esto nomas lo pongo porque inicia contrullendo, pero quiza no hara falta despues que este en start
         ToggleDefensePreviews(true);
     }
@@ -44,6 +50,8 @@ public class PlayerActions : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!isAlive)
+            return;
         if (Input.GetKeyUp(KeyCode.Mouse0))
         {
             if (isBuilding)
@@ -68,6 +76,26 @@ public class PlayerActions : MonoBehaviour
         {
             MovePreview();
             AdjustPreviewSpot();
+        }
+    }
+
+    private void OnDeath()
+    {
+        isAlive = false;
+        if (isBuilding)
+        {
+            ToggleDefensePreviews(false);
+        }
+    }
+
+    private void OnRevive()
+    {
+        isAlive = true;
+        if (isBuilding)
+        {
+            defenseOnLeftClickAction = DefenseAction.None;
+            defenseOnRightClickAction = DefenseAction.None;
+            ToggleDefensePreviews(true);
         }
     }
 
@@ -236,6 +264,8 @@ public class PlayerActions : MonoBehaviour
             lastGunIndex = currentSelectionIndex;
             currentSelectionIndex = lastDefenseIndex;
             currentSelectionLimit = defenseSlots;
+            defenseOnLeftClickAction = DefenseAction.None;
+            defenseOnRightClickAction = DefenseAction.None;
             ToggleDefensePreviews(true);
         }
     }

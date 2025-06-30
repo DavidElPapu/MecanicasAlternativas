@@ -24,30 +24,51 @@ public class PlayerMovement : MonoBehaviour
 
     public Transform cameraTrasform, bodyTransform;
     private Rigidbody rb;
-
+    private bool isAlive;
 
     private void Start()
     {
+        moveSpeed = walkSpeed;
+        gravityScale = normalGravity;
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
         rb.linearDamping = 5f;
         rb.useGravity = false;
-        moveSpeed = walkSpeed;
-        gravityScale = normalGravity;
+        isAlive = true;
+        PlayerStatus.PlayerDeath += OnDeath;
+        PlayerStatus.PlayerRevive += OnRevive;
     }
 
     private void Update()
     {
-        PlayerInput();
-        GroundCheck();
-        RotatePlayerBody();
-        SpeedControl();
+        if (isAlive)
+        {
+            PlayerInput();
+            GroundCheck();
+            RotatePlayerBody();
+            SpeedControl();
+        }
     }
 
     private void FixedUpdate()
     {
-        MovePlayer();
-        ApplyGravity();
+        if (isAlive)
+        {
+            MovePlayer();
+            ApplyGravity();
+        }
+    }
+
+    private void OnDeath()
+    {
+        isAlive = false;
+    }
+
+    private void OnRevive()
+    {
+        moveSpeed = walkSpeed;
+        gravityScale = normalGravity;
+        isAlive = true;
     }
 
     private void PlayerInput()

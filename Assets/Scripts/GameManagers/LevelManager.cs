@@ -1,10 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class LevelManager : MonoBehaviour
 {
     [Header("LevelManagement")]
     public LevelsData levelData;
+    public static event Action OnWaveStart;
+    public static event Action OnBreakStart;
     private int currentWave;
     private bool isOnBreak;
     [Header("MapGridData")]
@@ -15,6 +18,10 @@ public class LevelManager : MonoBehaviour
     public EnemySpawnManager enemySpawnManager;
     public Transform[] enemySpawnPoints = new Transform[6];
     public Transform[] mapWayPointParents = new Transform[6];
+    [Header("PlayerManagement")]
+    public PlayerStatus playerStatus;
+    public float playerReviveTime;
+    public Transform playerSpawn;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -23,6 +30,7 @@ public class LevelManager : MonoBehaviour
         isOnBreak = true;
         InitializeMapGrid();
         InitializeEnemySpawner();
+        PlayerStatus.PlayerDeath += OnPlayerDeath;
         enemySpawnManager.SpawnEnemy(levelData.wave1Enemies[0]);
     }
 
@@ -37,6 +45,16 @@ public class LevelManager : MonoBehaviour
         {
 
         }
+    }
+
+    private void OnPlayerDeath()
+    {
+        Invoke("RevivePlayer", playerReviveTime);
+    }
+
+    private void RevivePlayer()
+    {
+        playerStatus.OnRevive();
     }
 
 

@@ -2116,6 +2116,7 @@ MonoBehaviour:
   - {fileID: 2006780744}
   - {fileID: 1434341857}
   - {fileID: 798527831}
+  playerSpawn: {fileID: 0}
 --- !u!4 &1524749327
 Transform:
   m_ObjectHideFlags: 0
@@ -2206,6 +2207,7 @@ GameObject:
   - component: {fileID: 1639009006}
   - component: {fileID: 1639009008}
   - component: {fileID: 1639009009}
+  - component: {fileID: 1639009010}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -2327,6 +2329,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startingMoney: 200
+--- !u!114 &1639009010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1639009004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2ecb5ab334fffa4f9b746c5f2e7d0ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1688196575
 GameObject:
   m_ObjectHideFlags: 0

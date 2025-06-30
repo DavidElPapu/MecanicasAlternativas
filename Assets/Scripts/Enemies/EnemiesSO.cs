@@ -26,7 +26,6 @@ public class EnemiesSO : ScriptableObject
     {
         Ignore,
         AttackOnlyInRange,
-        FollowInRange,
         AlwaysFollow
     }
     public FocusType playerFocus;

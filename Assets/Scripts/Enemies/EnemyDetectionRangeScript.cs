@@ -4,14 +4,11 @@ using UnityEngine;
 public class EnemyDetectionRangeScript : MonoBehaviour
 {
     private EnemyClass enemy;
-    private bool targetPlayer, isInitialized, isAttackRange;
-    private List<GameObject> targetsInRange = new List<GameObject>();
+    private bool isInitialized;
 
-    public void InitializeDetection(EnemyClass enemy, bool canTargetPlayer, bool isAttackRange)
+    public void InitializeDetection(EnemyClass enemy)
     {
         this.enemy = enemy;
-        targetPlayer = canTargetPlayer;
-        this.isAttackRange = isAttackRange;
         isInitialized = true;
     }
 
@@ -19,20 +16,14 @@ public class EnemyDetectionRangeScript : MonoBehaviour
     {
         if (!isInitialized)
             return;
-        if (other.gameObject.CompareTag("Player") && targetPlayer)
+        if (other.gameObject.CompareTag("Player"))
         {
-            //falta checar que el jugador este vivo
-            if (isAttackRange)
-                enemy.OnTargetEnteredAttackZone(other.gameObject, true);
-            else
-                Debug.Log("Toca Seguir al jugador");
-            targetsInRange.Add(other.gameObject);
+            enemy.OnTargetEnteredAttackZone(other.gameObject, true);
         }
-        else if (other.gameObject.CompareTag("Defense") && isAttackRange)
+        else if (other.gameObject.CompareTag("Defense"))
         {
             //falta checar que la defensa este activa
             enemy.OnTargetEnteredAttackZone(other.gameObject, false);
-            targetsInRange.Add(other.gameObject);
         }
     }
 
@@ -40,20 +31,9 @@ public class EnemyDetectionRangeScript : MonoBehaviour
     {
         if (!isInitialized)
             return;
-        if (targetsInRange.Contains(other.gameObject))
-        {
-            targetsInRange.Remove(other.gameObject);
-            if (isAttackRange)
-            {
-                if (targetsInRange.Count > 0)
-                    enemy.OnTargetLeftAttackZone(targetsInRange[0]);
-                else
-                    enemy.OnTargetLeftAttackZone(null);
-            }
-            else if (targetsInRange.Count > 0) 
-            {
-                //aca toca hacer lo mismo, pero para el rango de seguimiento
-            }
-        }
+        if (other.gameObject.CompareTag("Player"))
+            enemy.OnTargetLeftAttackZone(other.gameObject, true);
+        else if (other.gameObject.CompareTag("Defense"))
+            enemy.OnTargetLeftAttackZone(other.gameObject, false);
     }
 }

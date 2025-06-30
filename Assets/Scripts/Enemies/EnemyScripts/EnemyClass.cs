@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public abstract class EnemyClass : MonoBehaviour
 {
     public EnemiesSO enemySO;
-    public EnemyDetectionRangeScript attackDetectionRange, followDetectionRange;
+    public EnemyDetectionRangeScript attackDetectionRange;
+    public event Action<GameObject> EnemyDeath;
     protected EnemySpawnManager enemyManager;
     protected Rigidbody rb; 
     [Header("Stats")]
@@ -19,6 +21,7 @@ public abstract class EnemyClass : MonoBehaviour
     protected float distanceToWayPoint;
     protected List<Transform> wayPoints = new List<Transform>();
     protected GameObject currentTarget;
+    protected List<GameObject> targetsInRange = new List<GameObject>();
 
     protected virtual void Awake()
     {
@@ -32,12 +35,7 @@ public abstract class EnemyClass : MonoBehaviour
         else
         {
             enemyManager = enemySpawnManager;
-            if (enemySO.playerFocus == EnemiesSO.FocusType.Ignore)
-                attackDetectionRange.InitializeDetection(this, false, true);
-            else
-                attackDetectionRange.InitializeDetection(this, true, true);
-            if (followDetectionRange != null)
-                followDetectionRange.InitializeDetection(this, true, false);
+            attackDetectionRange.InitializeDetection(this);
             currentHealth = enemySO.health;
             damageMultiplier = 1f;
             speedMultiplier = 1f;
@@ -98,7 +96,6 @@ public abstract class EnemyClass : MonoBehaviour
     {
         if (currentTarget == null)
         {
-            Debug.Log(currentWayPoint);
             Vector3 targetPos = new Vector3(wayPoints[currentWayPoint].position.x, transform.position.y, wayPoints[currentWayPoint].position.z);
             Vector3 moveDirection = targetPos - transform.position;
             rb.AddForce(moveDirection.normalized * enemySO.speed, ForceMode.Force);
@@ -111,31 +108,63 @@ public abstract class EnemyClass : MonoBehaviour
                 currentWayPoint++;
                 if (currentWayPoint >= wayPoints.Count)
                 {
-                    Debug.Log("Esto no deberia pasar en un juego real, pero el enemigo logro llegar a la meta");
+                    //Debug.Log("Esto no deberia pasar en un juego real, pero el enemigo logro llegar a la meta");
                     currentWayPoint--;
                 }
             }
         }
-        else
-        {
-            Vector3 targetPos = new Vector3(currentTarget.transform.position.x, transform.position.y, currentTarget.transform.position.z);
-            Vector3 moveDirection = targetPos - transform.position;
-            rb.AddForce(moveDirection.normalized * enemySO.speed, ForceMode.Force);
-            transform.LookAt(targetPos);
-        }
+        //else
+        //{
+        //    Vector3 targetPos = new Vector3(currentTarget.transform.position.x, transform.position.y, currentTarget.transform.position.z);
+        //    Vector3 moveDirection = targetPos - transform.position;
+        //    rb.AddForce(moveDirection.normalized * enemySO.speed, ForceMode.Force);
+        //    transform.LookAt(targetPos);
+        //}
     }
 
     public virtual void OnTargetEnteredAttackZone(GameObject target, bool isPlayer)
     {
-        isOnFightMode = true;
-        currentTarget = target;
+        if (isPlayer)
+        {
+            if (enemySO.playerFocus == EnemiesSO.FocusType.Ignore)
+                return;
+            targetsInRange.Add(target);
+            currentTarget = target;
+            PlayerStatus.PlayerDeath += OnPlayerDeath;
+            if (!isOnFightMode)
+                isOnFightMode = true;
+        }
+        else if(!isOnFightMode)
+        {
+            targetsInRange.Add(target);
+            isOnFightMode = true;
+            currentTarget = target;
+        }
     }
 
-    public virtual void OnTargetLeftAttackZone(GameObject newTarget)
+    public virtual void OnTargetLeftAttackZone(GameObject goneTarget, bool isPlayer)
     {
-        currentTarget = newTarget;
-        if (!currentTarget)
-            isOnFightMode = false;
+        if (targetsInRange.Contains(goneTarget))
+        {
+            targetsInRange.Remove(goneTarget);
+            if (isPlayer)
+                PlayerStatus.PlayerDeath -= OnPlayerDeath;
+            if (currentTarget == goneTarget)
+            {
+                if (targetsInRange.Count > 0)
+                    currentTarget = targetsInRange[0];
+                else
+                {
+                    currentTarget = null;
+                    isOnFightMode = false;
+                }
+            }
+        }
+    }
+
+    protected virtual void OnPlayerDeath()
+    {
+        OnTargetLeftAttackZone(currentTarget, true);
     }
 
     public virtual (int wayPoint, float distance) GetDistanceToBase()
