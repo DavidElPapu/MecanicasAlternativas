@@ -3,6 +3,7 @@ using System;
 
 public class PlayerStatus : MonoBehaviour
 {
+    public PlayerMainUI playerUI;
     public float maxHealth;
     public static event Action PlayerDeath;
     public static event Action PlayerRevive;
@@ -18,7 +19,8 @@ public class PlayerStatus : MonoBehaviour
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
-        if(currentHealth < 0)
+        playerUI.ChangePlayerHealth(currentHealth);
+        if (currentHealth < 0)
         {
             isAlive = false;
             PlayerDeath?.Invoke();
@@ -30,6 +32,7 @@ public class PlayerStatus : MonoBehaviour
         currentHealth += healAmount;
         if (currentHealth > maxHealth)
             currentHealth = maxHealth;
+        playerUI.ChangePlayerHealth(currentHealth);
     }
 
     public void OnRevive()

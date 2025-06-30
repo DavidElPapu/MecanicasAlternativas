@@ -1,8 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class EnemySpawnManager : MonoBehaviour
 {
+    public PlayerMainUI playerUI;
+    public event Action WaveCleared;
     public List<GameObject> enemiesAlive = new List<GameObject>();
     private Transform[] enemySpawnPoints = new Transform[6];
     private List<Transform> enemyPath1WayPoints = new List<Transform>();
@@ -14,7 +17,7 @@ public class EnemySpawnManager : MonoBehaviour
 
     public void SpawnEnemy(GameObject enemyPrefab)
     {
-        int spawnPointIndex = Random.Range(0, enemySpawnPoints.Length);
+        int spawnPointIndex = UnityEngine.Random.Range(0, enemySpawnPoints.Length);
         List<Transform> newEnemyWayPoints = new List<Transform>();
         switch (spawnPointIndex)
         {
@@ -41,7 +44,9 @@ public class EnemySpawnManager : MonoBehaviour
         }
         GameObject newEnemy = Instantiate(enemyPrefab, enemySpawnPoints[spawnPointIndex].position, enemySpawnPoints[spawnPointIndex].rotation);
         newEnemy.GetComponent<EnemyClass>().OnSpawn(this, newEnemyWayPoints);
+        newEnemy.GetComponent<EnemyClass>().EnemyDeath += EnemyDied;
         enemiesAlive.Add(newEnemy);
+        playerUI.ChangeEnemiesAliveText(enemiesAlive.Count);
     }
 
     public void SetStartingValues(Transform[] enemySpawnPoints, Transform[] wayPointParents)
@@ -75,6 +80,17 @@ public class EnemySpawnManager : MonoBehaviour
                         break;
                 }
             }
+        }
+    }
+
+    private void EnemyDied(GameObject enemy)
+    {
+        if (enemiesAlive.Contains(enemy))
+        {
+            enemiesAlive.Remove(enemy);
+            playerUI.ChangeEnemiesAliveText(enemiesAlive.Count);
+            if (enemiesAlive.Count <= 0)
+                WaveCleared?.Invoke();
         }
     }
 }

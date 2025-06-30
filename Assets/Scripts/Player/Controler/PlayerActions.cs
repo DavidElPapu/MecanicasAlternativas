@@ -6,11 +6,13 @@ public class PlayerActions : MonoBehaviour
     public int defenseSlots, gunSlots;
     public float maxBuildingRange;
     public Transform previewSpot;
+    public Transform playerCamera;
     public LayerMask mapLayer;
     public Grid mapGrid;
     public EconomySystem economySystem;
     public MapGridDataManager mapGridDataManager;
     public GameObject[] equippedDefensesPrefabs = new GameObject[10];
+    public GunSO[] equippedGunsSO = new GunSO[3];
     private bool isBuilding, isAlive;
     private int currentSelectionIndex, lastSelectionIndex, lastGunIndex, lastDefenseIndex, currentSelectionLimit;
     private Vector3Int lastPreviewGridPos;
@@ -43,6 +45,8 @@ public class PlayerActions : MonoBehaviour
         defenseOnRightClickAction = DefenseAction.None;
         PlayerStatus.PlayerDeath += OnDeath;
         PlayerStatus.PlayerRevive += OnRevive;
+        LevelManager.OnBreakStart += OnBreakStart;
+        LevelManager.OnWaveStart += OnWaveStart;
         //esto nomas lo pongo porque inicia contrullendo, pero quiza no hara falta despues que este en start
         ToggleDefensePreviews(true);
     }
@@ -56,18 +60,15 @@ public class PlayerActions : MonoBehaviour
         {
             if (isBuilding)
                 BuildOrUpgrade();
-            //else
-                    //dispara
+            else
+                GunAttack();
         }
         if (Input.GetKeyUp(KeyCode.Mouse1))
         {
             if (isBuilding)
                 RotateOrDelete();
         }
-        if (Input.GetKeyUp(KeyCode.Q))
-        {
-            SwitchMode();
-        }
+        
         float mouseScroll = Input.GetAxis("Mouse ScrollWheel");
         if (mouseScroll != 0f)
             SwitchSelection(mouseScroll);
@@ -77,6 +78,16 @@ public class PlayerActions : MonoBehaviour
             MovePreview();
             AdjustPreviewSpot();
         }
+    }
+
+    private void OnBreakStart()
+    {
+        SwitchMode();
+    }
+
+    private void OnWaveStart()
+    {
+        SwitchMode();
     }
 
     private void OnDeath()
@@ -97,6 +108,11 @@ public class PlayerActions : MonoBehaviour
             defenseOnRightClickAction = DefenseAction.None;
             ToggleDefensePreviews(true);
         }
+    }
+
+    private void GunAttack()
+    {
+        equippedGunsSO[currentSelectionIndex].Attack(playerCamera);
     }
 
     private void BuildOrUpgrade()

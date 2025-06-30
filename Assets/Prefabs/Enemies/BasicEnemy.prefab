@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 4586677365492673894}
   - component: {fileID: 6771047356981587426}
   - component: {fileID: 5812890207265077110}
-  - component: {fileID: 1390192332777625657}
   m_Layer: 0
   m_Name: EnemyBody
   m_TagString: Untagged
@@ -87,29 +86,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &1390192332777625657
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2637000027897633039}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2904585625974530372
 GameObject:
   m_ObjectHideFlags: 0
@@ -187,6 +163,7 @@ GameObject:
   - component: {fileID: 231817135146686454}
   - component: {fileID: 692500505768485377}
   - component: {fileID: 6491192589129298619}
+  - component: {fileID: 2635088474778347232}
   m_Layer: 0
   m_Name: BasicEnemy
   m_TagString: Enemy
@@ -256,3 +233,26 @@ MonoBehaviour:
   currentHealth: 0
   currentShieldPoints: 0
   currentShieldHealth: 0
+--- !u!136 &2635088474778347232
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6244431438563432378}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}

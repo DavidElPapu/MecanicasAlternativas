@@ -75,7 +75,11 @@ public abstract class EnemyClass : MonoBehaviour
 
     public virtual void TakeDamage(float damage, GameObject damageDealer)
     {
-        if (damageDealer.CompareTag("Defense"))
+        if (damageDealer == null)
+        {
+            //fue el jugador
+        }
+        else if (damageDealer.CompareTag("Defense"))
         {
             DefensesSO defenseData = damageDealer.GetComponent<DefenseClass>().defenseSO;
             if (defenseData.appliedDebuffs.Count > 0)

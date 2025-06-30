@@ -5,19 +5,42 @@ using UnityEngine.UI;
 
 public class PlayerMainUI : MonoBehaviour
 {
-    public Slider baseHealthSlider;
-    public TextMeshProUGUI baseHealthText;
+    public Slider baseHealthSlider, playerHealthSlider;
+    public TextMeshProUGUI baseHealthText, playerHealthText, waveStatusText, enemiesAliveText, moneyText;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
     void Start()
     {
         
     }
 
-    // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public void ChangeMoneyText(int money)
+    {
+        moneyText.text = "$" + money.ToString();
+    }
+
+    public void ChangeEnemiesAliveText(int enemiesAlive)
+    {
+        if (enemiesAlive <= 0)
+            enemiesAliveText.text = "...";
+        else
+            enemiesAliveText.text = "Enemies Alive: " + enemiesAlive.ToString();
+    }
+
+    public void ChangeWaveStatus(string statusText)
+    {
+        waveStatusText.text = statusText;
+    }
+
+    public void ChangePlayerHealth(float newHealth)
+    {
+        playerHealthSlider.value = newHealth;
+        playerHealthText.text = newHealth.ToString();
     }
 
     public void ChangeBaseHealthUI(float newHealth)
