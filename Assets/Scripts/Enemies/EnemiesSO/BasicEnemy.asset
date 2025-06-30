@@ -19,5 +19,5 @@ MonoBehaviour:
   attackCooldown: 1
   health: 100
   shieldPoints: 0
-  speed: 15
+  speed: 40
   playerFocus: 1

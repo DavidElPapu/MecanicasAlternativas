@@ -8,8 +8,9 @@ public class LevelManager : MonoBehaviour
     public LevelsData levelData;
     public static event Action OnWaveStart;
     public static event Action OnBreakStart;
+    public static event Action OnGameLost;
     private int currentWave;
-    private bool isOnBreak;
+    private bool isOnBreak, lostGame;
     [Header("MapGridData")]
     public MapGridDataManager mapGridDataManager;
     public GameObject groundValidDefenseIndicatorsParent, ceilingValidDefenseIndicatorParent;
@@ -22,12 +23,15 @@ public class LevelManager : MonoBehaviour
     public PlayerStatus playerStatus;
     public float playerReviveTime;
     public Transform playerSpawn;
+    [Header("UI")]
+    public PlayerMainUI playerUI;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         currentWave = 0;
         isOnBreak = true;
+        lostGame = false;
         InitializeMapGrid();
         InitializeEnemySpawner();
         PlayerStatus.PlayerDeath += OnPlayerDeath;
@@ -71,5 +75,10 @@ public class LevelManager : MonoBehaviour
     private void InitializeMapGrid()
     {
         mapGridDataManager.SetGridData(mapGrid, groundValidDefenseIndicatorsParent, ceilingValidDefenseIndicatorParent);
+    }
+
+    public void BaseDied()
+    {
+        OnGameLost?.Invoke();
     }
 }

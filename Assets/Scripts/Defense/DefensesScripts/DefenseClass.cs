@@ -48,6 +48,8 @@ public abstract class DefenseClass : MonoBehaviour
     {
         if (defenseSO == null)
             Debug.LogError("No tiene defenseSO");
+        if (detectionRange != null)
+            detectionRange.InitializeDetection(this);
         isBroken = false;
         isActive = true;
         currentLevel = 1;
