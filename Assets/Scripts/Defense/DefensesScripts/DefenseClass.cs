@@ -1,30 +1,47 @@
+using System.Collections.Generic;
 using UnityEngine;
 using System;
 
 public abstract class DefenseClass : MonoBehaviour
 {
     public DefensesSO defenseSO;
+    public DefenseDetectionRangeScript detectionRange;
     public event Action<GameObject> DefenseBroken;
-    protected bool isBroken;
-    protected float damageMultiplier;
-    [SerializeField] protected float currentHealth;
-    [SerializeField] protected int currentLevel;
+    protected bool isBroken, isActive;
+    protected int currentLevel;
+    protected float currentHealth, currentCooldown, damageMultiplier;
     [SerializeField] protected GameObject defenseModel;
     [SerializeField] protected Material previewMAT;
+    protected GameObject currentTarget;
+    protected List<GameObject> targetsInRange = new List<GameObject>();
 
     public virtual void Awake()
     {
         currentLevel = 0;
+        isActive = false;
     }
+
+    protected virtual void Update()
+    {
+        //if (!isActive)
+        //    return;
+        //if (isActing)
+        //    DoMainAction();
+    }
+
+    protected abstract void DoMainAction();
 
     protected virtual void OnWaveStart()
     {
-
+        if (!isActive)
+            isActive = true;
     }
 
     protected virtual void OnBreakStart()
     {
-
+        OnRepair();
+        if (isActive)
+            isActive = false;
     }
 
     public virtual void OnPlacing()
@@ -32,9 +49,12 @@ public abstract class DefenseClass : MonoBehaviour
         if (defenseSO == null)
             Debug.LogError("No tiene defenseSO");
         isBroken = false;
-        damageMultiplier = 1f;
-        currentHealth = defenseSO.health;
+        isActive = true;
         currentLevel = 1;
+        currentHealth = defenseSO.health;
+        currentCooldown = defenseSO.mainCooldown;
+        damageMultiplier = 1f;
+        currentTarget = null;
         //cuando se ponga, mejor que cambie a otro material, no el preview
         ChangeModelMaterials(Color.white);
         defenseModel.GetComponent<BoxCollider>().isTrigger = false;
@@ -56,7 +76,10 @@ public abstract class DefenseClass : MonoBehaviour
 
     protected virtual void OnRepair()
     {
-        isBroken = false;
+        if (isBroken)
+            isBroken = false;
+        currentHealth = defenseSO.health;
+
     }
 
     public virtual void OnUpgrading()
@@ -67,8 +90,7 @@ public abstract class DefenseClass : MonoBehaviour
 
     public virtual void ChangeModelMaterials(Color color)
     {
-        if (color != Color.white)
-            color.a = 0.3f;
+        color.a = 0.3f;
         previewMAT.color = color;
         foreach (MeshRenderer modelPartsRenderers in defenseModel.GetComponentsInChildren<MeshRenderer>())
         {
@@ -78,11 +100,34 @@ public abstract class DefenseClass : MonoBehaviour
 
     public virtual void OnDamaged(float damage)
     {
+        currentHealth -= damage;
+        if (currentHealth <= 0)
+            OnBroken();
+    }
 
+    public virtual void OnTargetEnteredDetectionRange(GameObject target)
+    {
+        targetsInRange.Add(target);
+    }
+
+    public virtual void OnTargetLeftDetectionRange(GameObject target)
+    {
+        if (targetsInRange.Contains(target))
+            targetsInRange.Remove(target);
     }
 
     public virtual int GetCurrentLevel()
     {
         return currentLevel;
+    }
+
+    public virtual bool CanBeAttackedByEnemy()
+    {
+        if (!isActive || isBroken)
+            return false;
+        else if (defenseSO.enemyInteraction == DefensesSO.EnemyInteractionType.IgnoreEnemyAndDefense || defenseSO.enemyInteraction == DefensesSO.EnemyInteractionType.IgnoreDefenseTargetEnemy)
+            return false;
+        else
+            return true;
     }
 }

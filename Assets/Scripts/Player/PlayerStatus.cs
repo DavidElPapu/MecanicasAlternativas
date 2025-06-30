@@ -6,7 +6,7 @@ public class PlayerStatus : MonoBehaviour
     public float maxHealth;
     public static event Action PlayerDeath;
     public static event Action PlayerRevive;
-    private float currentHealth;
+    [SerializeField] private float currentHealth;
     private bool isAlive;
 
     void Start()

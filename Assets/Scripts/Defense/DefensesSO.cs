@@ -13,22 +13,23 @@ public class DefensesSO : ScriptableObject
     [Header("Defense Data")]
     public float damage;
     public float health;
+    public float mainCooldown;
     public enum DebuffType
     {
-        None,
         Stun,
         Slow,
         Poison,
         Weakness
     }
     public List<DebuffType> appliedDebuffs = new List<DebuffType>();
-    public float appliedDebuffTime;
-    public enum DefenseType
+    public List<float> debuffsIntensities = new List<float>();
+    public List<float> debuffsTimes = new List<float>();
+    public enum EnemyInteractionType
     {
-        Turret,
-        Trap,
-        Control,
-        Support,
+        IgnoreEnemyAndDefense,
+        IgnoreEnemyTargetDefense,
+        IgnoreDefenseTargetEnemy,
+        TargetDefenseAndEnemy,
     }
-    public DefenseType defenseType;
+    public EnemyInteractionType enemyInteraction;
 }

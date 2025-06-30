@@ -6,19 +6,22 @@ public abstract class EnemyClass : MonoBehaviour
 {
     public EnemiesSO enemySO;
     public EnemyDetectionRangeScript attackDetectionRange;
+    public float attackRange;
     public event Action<GameObject> EnemyDeath;
     protected EnemySpawnManager enemyManager;
     protected Rigidbody rb; 
     [Header("Stats")]
     [SerializeField] protected float currentHealth;
+    protected bool isStunned;
     protected float damageMultiplier;
     protected float speedMultiplier;
+    protected float speedDebuff, damageDebuff, poisonDebuff;
     [SerializeField] protected int currentShieldPoints;
     [SerializeField] protected float currentShieldHealth;
     [Header("Behaviour")]
     protected bool isOnFightMode;
     protected int currentWayPoint;
-    protected float distanceToWayPoint;
+    protected float distanceToWayPoint, attackCooldownCount;
     protected List<Transform> wayPoints = new List<Transform>();
     protected GameObject currentTarget;
     protected List<GameObject> targetsInRange = new List<GameObject>();
@@ -37,12 +40,17 @@ public abstract class EnemyClass : MonoBehaviour
             enemyManager = enemySpawnManager;
             attackDetectionRange.InitializeDetection(this);
             currentHealth = enemySO.health;
+            isStunned = false;
             damageMultiplier = 1f;
             speedMultiplier = 1f;
+            speedDebuff = 1f;
+            damageDebuff = 1f;
+            poisonDebuff = 0f;
             currentShieldPoints = enemySO.shieldPoints;
             currentShieldHealth = currentHealth;
             isOnFightMode = false;
             currentWayPoint = 1;
+            attackCooldownCount = enemySO.attackCooldown;
             wayPoints = myWayPoints;
             currentTarget = null;
         }
@@ -62,12 +70,23 @@ public abstract class EnemyClass : MonoBehaviour
 
     public virtual void OnDeath()
     {
-        Debug.Log("Me mori");
+        EnemyDeath?.Invoke(gameObject);
     }
 
-    public virtual void TakeDamage(float damage, DefensesSO.DebuffType debuff, bool ignoreShield)
+    public virtual void TakeDamage(float damage, GameObject damageDealer)
     {
-        if (currentShieldPoints > 0 && !ignoreShield)
+        if (damageDealer.CompareTag("Defense"))
+        {
+            DefensesSO defenseData = damageDealer.GetComponent<DefenseClass>().defenseSO;
+            if (defenseData.appliedDebuffs.Count > 0)
+            {
+                for (int i = 0; i < defenseData.appliedDebuffs.Count; i++)
+                {
+                    GetDebuff(defenseData.appliedDebuffs[i], defenseData.debuffsIntensities[i], defenseData.debuffsTimes[i]);
+                }
+            }
+        }
+        if (currentShieldPoints > 0)
         {
             currentShieldHealth -= damage;
             if (currentShieldHealth <= 0f) 
@@ -85,11 +104,99 @@ public abstract class EnemyClass : MonoBehaviour
         }
     }
 
+    protected virtual void GetDebuff(DefensesSO.DebuffType debuff, float intensity, float duration)
+    {
+        switch (debuff)
+        {
+            case DefensesSO.DebuffType.Stun:
+                isStunned = true;
+                if (IsInvoking("StopStun"))
+                    CancelInvoke("StopStun");
+                Invoke("StopStun", duration);
+                break;
+            case DefensesSO.DebuffType.Slow:
+                if (speedDebuff > intensity)
+                    speedDebuff = intensity;
+                if (IsInvoking("StopSlow"))
+                    CancelInvoke("StopSlow");
+                Invoke("StopSlow", duration);
+                break;
+            case DefensesSO.DebuffType.Poison:
+                if (poisonDebuff < intensity)
+                {
+                    poisonDebuff = intensity;
+                    if (IsInvoking("ApplyPoison"))
+                        CancelInvoke("ApplyPoison");
+                    //Por ahora todos los venenos aplican daño cada 0.8 segundos, lo que cambia es el daño
+                    InvokeRepeating("ApplyPoison", 0.8f, 0.8f);
+                }
+                if (IsInvoking("StopPoison"))
+                    CancelInvoke("StopPoison");
+                Invoke("StopPoison", duration);
+                break;
+            case DefensesSO.DebuffType.Weakness:
+                if (damageDebuff > intensity)
+                    damageDebuff = intensity;
+                if (IsInvoking("StopWeakness"))
+                    CancelInvoke("StopWeakness");
+                Invoke("StopWeakness", duration);
+                break;
+            default:
+                break;
+        }
+    }
+
+    protected virtual void StopStun()
+    {
+        isStunned = false;
+    }
+
+    protected virtual void StopSlow()
+    {
+        speedDebuff = 1f;
+    }
+
+    protected virtual void ApplyPoison()
+    {
+        currentHealth -= poisonDebuff;
+        if (currentHealth <= 0f)
+            OnDeath();
+    }
+
+    protected virtual void StopPoison()
+    {
+        poisonDebuff = 0f;
+        if (IsInvoking("ApplyPoison"))
+            CancelInvoke("ApplyPoison");
+    }
+
+    protected virtual void StopWeakness()
+    {
+        damageDebuff = 1f;
+    }
+
     public virtual void Attack()
     {
-        /* Solo puede atacar o moverse, no puede hacer las 2 al mismo tiempo, en teoria siempre estara caminando, pero cuando se llame
-         * a una funcion del attackRange o detectionRange (este sera otro script para un trigger enter), entonces va a entrar en modo combate y atacar*/
-        //tambien deberia a cada rato checar la vida de su objetivo, por si muere debe dejar de atacar y ademas llamar a su rango deteccion para sacarlo de la lista
+        if (attackCooldownCount > 0)
+        {
+            attackCooldownCount -= Time.deltaTime;
+            if(attackCooldownCount <= 0f)
+            {
+                attackCooldownCount = enemySO.attackCooldown;
+                Vector3 rayDirection = currentTarget.transform.position - transform.position;
+                foreach (RaycastHit hit in Physics.RaycastAll(transform.position, rayDirection.normalized, attackRange))
+                {
+                    if (hit.collider.gameObject.CompareTag("Player"))
+                    {
+                        hit.collider.gameObject.GetComponent<PlayerStatus>().TakeDamage(enemySO.damage * damageMultiplier * damageDebuff);
+                    }
+                    else if (hit.collider.gameObject.CompareTag("Defense"))
+                    {
+                        hit.collider.gameObject.GetComponent<DefenseClass>().OnDamaged(enemySO.damage * damageMultiplier * damageDebuff);
+                    }
+                }
+            }
+        }
     }
 
     public virtual void Move()
@@ -98,7 +205,7 @@ public abstract class EnemyClass : MonoBehaviour
         {
             Vector3 targetPos = new Vector3(wayPoints[currentWayPoint].position.x, transform.position.y, wayPoints[currentWayPoint].position.z);
             Vector3 moveDirection = targetPos - transform.position;
-            rb.AddForce(moveDirection.normalized * enemySO.speed, ForceMode.Force);
+            rb.AddForce(moveDirection.normalized * enemySO.speed * speedMultiplier * speedDebuff, ForceMode.Force);
             transform.LookAt(targetPos);
             //Vector3 torqueAxis = Vector3.Cross(transform.forward, moveDirection.normalized);
             //rb.AddTorque(torqueAxis * 0.1f, ForceMode.Force);
@@ -129,16 +236,27 @@ public abstract class EnemyClass : MonoBehaviour
             if (enemySO.playerFocus == EnemiesSO.FocusType.Ignore)
                 return;
             targetsInRange.Add(target);
-            currentTarget = target;
             PlayerStatus.PlayerDeath += OnPlayerDeath;
-            if (!isOnFightMode)
-                isOnFightMode = true;
-        }
-        else if(!isOnFightMode)
-        {
-            targetsInRange.Add(target);
-            isOnFightMode = true;
             currentTarget = target;
+            if (!isOnFightMode)
+            {
+                isOnFightMode = true;
+                attackCooldownCount = enemySO.attackCooldown;
+            }
+        }
+        else
+        {
+            if (target.GetComponent<DefenseClass>().CanBeAttackedByEnemy())
+            {
+                targetsInRange.Add(target);
+                target.GetComponent<DefenseClass>().DefenseBroken += OnDefenseBroke;
+                if (!isOnFightMode)
+                {
+                    isOnFightMode = true;
+                    currentTarget = target;
+                    attackCooldownCount = enemySO.attackCooldown;
+                }
+            }
         }
     }
 
@@ -149,6 +267,8 @@ public abstract class EnemyClass : MonoBehaviour
             targetsInRange.Remove(goneTarget);
             if (isPlayer)
                 PlayerStatus.PlayerDeath -= OnPlayerDeath;
+            else
+                goneTarget.GetComponent<DefenseClass>().DefenseBroken -= OnDefenseBroke;
             if (currentTarget == goneTarget)
             {
                 if (targetsInRange.Count > 0)
@@ -165,6 +285,11 @@ public abstract class EnemyClass : MonoBehaviour
     protected virtual void OnPlayerDeath()
     {
         OnTargetLeftAttackZone(currentTarget, true);
+    }
+
+    protected virtual void OnDefenseBroke(GameObject defense)
+    {
+        OnTargetLeftAttackZone(defense, false);
     }
 
     public virtual (int wayPoint, float distance) GetDistanceToBase()

@@ -2,13 +2,51 @@ using UnityEngine;
 
 public class TrapDefense : DefenseClass
 {
-    public override void Awake()
+    [SerializeField] protected float trapDelay;
+    protected bool readyToActivate;
+
+    public override void OnPlacing()
     {
-        base.Awake();
+        base.OnPlacing();
+        readyToActivate = true;
     }
 
-    void Update()
+    protected override void OnRepair()
     {
-        //Update
+        readyToActivate = true;
+    }
+
+    protected override void Update()
+    {
+        if (!readyToActivate)
+        {
+            currentCooldown -= Time.deltaTime;
+            if (currentCooldown <= 0)
+            {
+                readyToActivate = true;
+                currentCooldown = defenseSO.mainCooldown;
+                if (targetsInRange.Count > 0)
+                    Invoke("DoMainAction", trapDelay);
+            }
+        }
+    }
+
+    protected override void DoMainAction()
+    {
+        CancelInvoke("DoMainAction");
+        readyToActivate = false;
+
+    }
+
+    public override void OnTargetEnteredDetectionRange(GameObject target)
+    {
+        base.OnTargetEnteredDetectionRange(target);
+        Invoke("DoMainAction", trapDelay);
+    }
+
+    public override void OnTargetLeftDetectionRange(GameObject target)
+    {
+        base.OnTargetLeftDetectionRange(target);
+        Invoke("DoMainAction", trapDelay);
     }
 }

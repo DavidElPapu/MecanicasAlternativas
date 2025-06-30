@@ -252,7 +252,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemySO: {fileID: 11400000, guid: a86b457f22d41df4aa09dd1a2784748d, type: 2}
   attackDetectionRange: {fileID: 383516575962406966}
-  followDetectionRange: {fileID: 0}
+  attackRange: 2
   currentHealth: 0
   currentShieldPoints: 0
   currentShieldHealth: 0
