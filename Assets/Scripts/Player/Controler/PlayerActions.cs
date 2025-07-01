@@ -258,8 +258,6 @@ public class PlayerActions : MonoBehaviour
 
     private void SwitchDefensePreview()
     {
-        Debug.Log(currentSelectionIndex);
-        Debug.Log(lastSelectionIndex);
         if (lastSelectionIndex == currentSelectionIndex)
             return;
         defensePreviews[lastSelectionIndex].SetActive(false);
@@ -279,7 +277,7 @@ public class PlayerActions : MonoBehaviour
                 newPreview.SetActive(false);
                 if (i == currentSelectionIndex)
                     newPreview.SetActive(true);
-                ChangePreviewColor();
+                //ChangePreviewColor();
             }
             else
             {
