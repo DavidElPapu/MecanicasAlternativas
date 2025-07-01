@@ -6,6 +6,7 @@ public abstract class DefenseClass : MonoBehaviour
 {
     public DefensesSO defenseSO;
     public DefenseDetectionRangeScript detectionRange;
+    [SerializeField] protected Material defenseMAT;
     public event Action<GameObject> DefenseBroken;
     protected bool isBroken, isActive;
     protected int currentLevel;
@@ -57,9 +58,11 @@ public abstract class DefenseClass : MonoBehaviour
         currentCooldown = defenseSO.mainCooldown;
         damageMultiplier = 1f;
         currentTarget = null;
-        //cuando se ponga, mejor que cambie a otro material, no el preview
-        ChangeModelMaterials(Color.white);
-        defenseModel.GetComponent<BoxCollider>().isTrigger = false;
+        //defenseModel.GetComponent<BoxCollider>().isTrigger = false;
+        foreach (MeshRenderer modelPartsRenderers in defenseModel.GetComponentsInChildren<MeshRenderer>())
+        {
+            modelPartsRenderers.material = defenseMAT;
+        }
         LevelManager.OnWaveStart += OnWaveStart;
         LevelManager.OnBreakStart += OnBreakStart;
     }

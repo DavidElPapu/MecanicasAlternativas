@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class PlayerMainUI : MonoBehaviour
 {
+    public GameObject deathUI;
     public Slider baseHealthSlider, playerHealthSlider;
     public TextMeshProUGUI baseHealthText, playerHealthText, waveStatusText, enemiesAliveText, moneyText;
 
@@ -17,6 +18,14 @@ public class PlayerMainUI : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void ToggleDeathUI(bool showUI)
+    {
+        if (showUI)
+            deathUI.SetActive(true);
+        else
+            deathUI.SetActive(false);
     }
 
     public void ChangeMoneyText(int money)

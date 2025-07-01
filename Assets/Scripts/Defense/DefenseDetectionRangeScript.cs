@@ -17,7 +17,7 @@ public class DefenseDetectionRangeScript : MonoBehaviour
             return;
         if (other.gameObject.CompareTag("Enemy"))
         {
-            
+            defense.OnTargetEnteredDetectionRange(other.gameObject);
         }
     }
 
@@ -27,7 +27,7 @@ public class DefenseDetectionRangeScript : MonoBehaviour
             return;
         if (other.gameObject.CompareTag("Enemy"))
         {
-
+            defense.OnTargetLeftDetectionRange(other.gameObject);
         }
             
     }

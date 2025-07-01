@@ -13,17 +13,19 @@ public class GunSO : ScriptableObject
     public float attackCooldown;
     public float range;
     public float bulletSpeed;
+    public float bulletLifeTime;
 
-    public virtual void Attack(Transform playerCameraTransform)
+    public virtual void Attack(Transform gunCannon)
     {
         if (bulletPrefab)
         {
-            GameObject newBullet = Instantiate(bulletPrefab, playerCameraTransform.position, playerCameraTransform.rotation);
-            newBullet.gameObject.GetComponent<Rigidbody>().AddForce(playerCameraTransform.forward * bulletSpeed, ForceMode.Impulse);
+            GameObject newBullet = Instantiate(bulletPrefab, gunCannon.position, gunCannon.rotation);
+            newBullet.GetComponent<ProjectileClass>().SetValues(damage, bulletLifeTime);
+            newBullet.gameObject.GetComponent<Rigidbody>().AddForce(gunCannon.forward * bulletSpeed, ForceMode.Impulse);
         }
         else
         {
-            foreach (RaycastHit hit in Physics.RaycastAll(playerCameraTransform.position, playerCameraTransform.forward, range, layer, QueryTriggerInteraction.Ignore))
+            foreach (RaycastHit hit in Physics.RaycastAll(gunCannon.position, gunCannon.forward, range, layer, QueryTriggerInteraction.Ignore))
             {
                 if (hit.collider.gameObject.CompareTag("Enemy"))
                 {

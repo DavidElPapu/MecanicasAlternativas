@@ -6,18 +6,19 @@ public class PlayerActions : MonoBehaviour
     public int defenseSlots, gunSlots;
     public float maxBuildingRange;
     public Transform previewSpot;
-    public Transform playerCamera;
+    public Transform gunCannon;
     public LayerMask mapLayer;
     public Grid mapGrid;
     public EconomySystem economySystem;
     public MapGridDataManager mapGridDataManager;
     public GameObject[] equippedDefensesPrefabs = new GameObject[10];
     public GunSO[] equippedGunsSO = new GunSO[3];
-    private bool isBuilding, isAlive;
+    private bool isBuilding, isAlive, isAttacking;
     private int currentSelectionIndex, lastSelectionIndex, lastGunIndex, lastDefenseIndex, currentSelectionLimit;
+    private float currentGunCooldownCount;
     private Vector3Int lastPreviewGridPos;
     private Quaternion defaultRotation = Quaternion.identity;
-    private GameObject[] defensePreviews = new GameObject[10];
+    [SerializeField] private GameObject[] defensePreviews = new GameObject[10];
     private GridData mapGridData;
     private enum DefenseAction
     {
@@ -56,12 +57,17 @@ public class PlayerActions : MonoBehaviour
     {
         if (!isAlive)
             return;
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            if (!isBuilding)
+                isAttacking = true;
+        }
         if (Input.GetKeyUp(KeyCode.Mouse0))
         {
             if (isBuilding)
                 BuildOrUpgrade();
             else
-                GunAttack();
+                isAttacking = false;
         }
         if (Input.GetKeyUp(KeyCode.Mouse1))
         {
@@ -77,6 +83,10 @@ public class PlayerActions : MonoBehaviour
         {
             MovePreview();
             AdjustPreviewSpot();
+        }
+        else
+        {
+            GunCooldown();
         }
     }
 
@@ -110,9 +120,22 @@ public class PlayerActions : MonoBehaviour
         }
     }
 
+    private void GunCooldown()
+    {
+        if (currentGunCooldownCount > 0f && isAttacking)
+        {
+            currentGunCooldownCount -= Time.deltaTime;
+            if (currentGunCooldownCount <= 0)
+            {
+                currentGunCooldownCount = equippedGunsSO[currentSelectionIndex].attackCooldown;
+                GunAttack();
+            }
+        }
+    }
+
     private void GunAttack()
     {
-        equippedGunsSO[currentSelectionIndex].Attack(playerCamera);
+        equippedGunsSO[currentSelectionIndex].Attack(gunCannon);
     }
 
     private void BuildOrUpgrade()
@@ -235,6 +258,8 @@ public class PlayerActions : MonoBehaviour
 
     private void SwitchDefensePreview()
     {
+        Debug.Log(currentSelectionIndex);
+        Debug.Log(lastSelectionIndex);
         if (lastSelectionIndex == currentSelectionIndex)
             return;
         defensePreviews[lastSelectionIndex].SetActive(false);
@@ -272,17 +297,18 @@ public class PlayerActions : MonoBehaviour
             lastDefenseIndex = currentSelectionIndex;
             currentSelectionIndex = lastGunIndex;
             currentSelectionLimit = gunSlots;
+            currentGunCooldownCount = equippedGunsSO[currentSelectionIndex].attackCooldown;
             ToggleDefensePreviews(false);
         }
         else
         {
-            isBuilding = true;
             lastGunIndex = currentSelectionIndex;
             currentSelectionIndex = lastDefenseIndex;
             currentSelectionLimit = defenseSlots;
             defenseOnLeftClickAction = DefenseAction.None;
             defenseOnRightClickAction = DefenseAction.None;
             ToggleDefensePreviews(true);
+            isBuilding = true;
         }
     }
 
@@ -302,5 +328,7 @@ public class PlayerActions : MonoBehaviour
         //Si construlle, llama el cambio de defensa
         if (isBuilding)
             SwitchDefensePreview();
+        else
+            currentGunCooldownCount = equippedGunsSO[currentSelectionIndex].attackCooldown;
     }
 }

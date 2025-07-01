@@ -142,11 +142,13 @@ public class LevelManager : MonoBehaviour
 
     private void OnPlayerDeath()
     {
+        playerUI.ToggleDeathUI(true);
         Invoke("RevivePlayer", playerReviveTime);
     }
 
     private void RevivePlayer()
     {
+        playerUI.ToggleDeathUI(false);
         playerTransform.SetPositionAndRotation(playerSpawn.position, playerSpawn.rotation);
         playerStatus.OnRevive();
     }

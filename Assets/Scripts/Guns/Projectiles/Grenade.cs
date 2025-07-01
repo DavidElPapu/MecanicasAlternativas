@@ -1,28 +1,41 @@
 using UnityEngine;
 using System.Collections;
 
-public class Grenade : MonoBehaviour
+public class Grenade : ProjectileClass
 {
-    public SphereCollider explosionCollider; // solo el componente, no un hijo
+    public GameObject explosion;
     public float explosionDuration = 0.2f;
 
-    void Start()
+    public override void SetValues(float projectileDamage, float projectileLife)
     {
-        explosionCollider.enabled = false;
+        explosion.GetComponent<ExplosionDamage>().damage = projectileDamage;
+        if (explosion.activeSelf)
+            explosion.SetActive(false);
+        lifeTime = projectileLife;
+        isInitialized = true;
+        Destroy(gameObject, lifeTime);
     }
 
-    private void OnCollisionEnter(Collision collision)
+    protected override void OnCollisionEnter(Collision other)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Player") || !isInitialized)
             return;
+        OnImpact(other.gameObject);
+    }
+
+    protected override void OnImpact(GameObject enemy)
+    {
+        gameObject.GetComponent<Rigidbody>().useGravity = false;
+        gameObject.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
         StartCoroutine(Explode());
     }
 
-    IEnumerator Explode()
+    protected IEnumerator Explode()
     {
-        explosionCollider.enabled = true;
+        explosion.SetActive(true);
+        gameObject.GetComponent<MeshRenderer>().enabled = false;
         yield return new WaitForSeconds(explosionDuration);
-        explosionCollider.enabled = false;
+        explosion.SetActive(false);
         Destroy(gameObject);
     }
 }

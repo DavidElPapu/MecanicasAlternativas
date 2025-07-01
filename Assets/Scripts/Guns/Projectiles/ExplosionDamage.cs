@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ExplosionDamage : MonoBehaviour
 {
-    public float damage = 50f;
+    public float damage;
 
     private void OnTriggerEnter(Collider other)
     {

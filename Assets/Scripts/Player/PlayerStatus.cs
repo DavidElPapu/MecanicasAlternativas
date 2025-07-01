@@ -19,12 +19,13 @@ public class PlayerStatus : MonoBehaviour
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
-        playerUI.ChangePlayerHealth(currentHealth);
         if (currentHealth < 0)
         {
             isAlive = false;
+            currentHealth = 0;
             PlayerDeath?.Invoke();
         }
+        playerUI.ChangePlayerHealth(currentHealth);
     }
 
     public void GetHeal(float healAmount)
@@ -38,6 +39,7 @@ public class PlayerStatus : MonoBehaviour
     public void OnRevive()
     {
         currentHealth = maxHealth;
+        playerUI.ChangePlayerHealth(currentHealth);
         isAlive = true;
         PlayerRevive?.Invoke();
     }

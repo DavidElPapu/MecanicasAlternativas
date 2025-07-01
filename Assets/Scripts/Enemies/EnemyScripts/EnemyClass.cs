@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.UI;
+using TMPro;
 
 public abstract class EnemyClass : MonoBehaviour
 {
@@ -25,6 +27,10 @@ public abstract class EnemyClass : MonoBehaviour
     protected List<Transform> wayPoints = new List<Transform>();
     protected GameObject currentTarget;
     protected List<GameObject> targetsInRange = new List<GameObject>();
+    [Header("UI")]
+    public Transform enemyCanvas;
+    public Slider enemyHealthSlider, enemyShieldHealthSlider;
+    public TextMeshProUGUI enemyHealthText, enemyShieldPointsText;
 
     protected virtual void Awake()
     {
@@ -47,12 +53,21 @@ public abstract class EnemyClass : MonoBehaviour
             damageDebuff = 1f;
             poisonDebuff = 0f;
             currentShieldPoints = enemySO.shieldPoints;
-            currentShieldHealth = currentHealth;
+            if (currentShieldPoints > 0)
+                currentShieldHealth = currentHealth;
+            else
+                currentShieldHealth = 0f;
             isOnFightMode = false;
             currentWayPoint = 1;
             attackCooldownCount = enemySO.attackCooldown;
             wayPoints = myWayPoints;
             currentTarget = null;
+            enemyHealthSlider.maxValue = currentHealth;
+            enemyHealthSlider.value = currentHealth;
+            enemyHealthText.text = currentHealth.ToString();
+            enemyShieldHealthSlider.maxValue = currentHealth;
+            enemyShieldHealthSlider.value = currentShieldHealth;
+            enemyShieldPointsText.text = currentShieldPoints.ToString();
         }
     }
 
@@ -60,6 +75,7 @@ public abstract class EnemyClass : MonoBehaviour
     {
         if (isOnFightMode)
             Attack();
+        MoveCanvasToCamera();
     }
 
     protected virtual void FixedUpdate()
@@ -70,6 +86,7 @@ public abstract class EnemyClass : MonoBehaviour
 
     public virtual void OnDeath()
     {
+        Destroy(gameObject, 0.05f);
         EnemyDeath?.Invoke(gameObject);
     }
 
@@ -99,10 +116,14 @@ public abstract class EnemyClass : MonoBehaviour
                 if (currentShieldPoints > 0)
                     currentShieldHealth = enemySO.health;
             }
+            enemyShieldHealthSlider.value = currentShieldHealth;
+            enemyShieldPointsText.text = currentShieldPoints.ToString();
         }
         else
         {
             currentHealth -= damage;
+            enemyHealthSlider.value = currentHealth;
+            enemyHealthText.text = currentHealth.ToString();
             if (currentHealth <= 0f)
                 OnDeath();
         }
@@ -299,5 +320,10 @@ public abstract class EnemyClass : MonoBehaviour
     public virtual (int wayPoint, float distance) GetDistanceToBase()
     {
         return (currentWayPoint, distanceToWayPoint);
+    }
+
+    protected virtual void MoveCanvasToCamera()
+    {
+        enemyCanvas.LookAt(Camera.main.transform.position);
     }
 }
