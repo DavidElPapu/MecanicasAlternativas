@@ -3,9 +3,11 @@ using UnityEngine;
 
 public abstract class GunClass : MonoBehaviour
 {
-    public GunSO defenseSO;
+    public GunSO gunSO;
+    public GameObject gunModel;
+    public Sprite gunIcon;
     //public DefenseDetectionRangeScript detectionRange; deteccion melee o bulletPrefab
-    protected bool isAttacking;
+    protected bool isAttacking, isActive;
     protected int currentLevel;
     protected float currentAttackCooldown, damageMultiplier;
     //[SerializeField] protected GameObject defenseModel; gunSpawn municion
@@ -14,8 +16,9 @@ public abstract class GunClass : MonoBehaviour
     {
         isAttacking = false;
         currentLevel = 1;
-        currentAttackCooldown = defenseSO.attackCooldown;
+        currentAttackCooldown = gunSO.attackCooldown;
         damageMultiplier = 1f;
+        OnDeselect();
     }
 
     protected virtual void Update()
@@ -26,19 +29,25 @@ public abstract class GunClass : MonoBehaviour
             if (currentAttackCooldown <= 0 && isAttacking)
             {
                 Attack();
-                currentAttackCooldown = defenseSO.attackCooldown;
+                currentAttackCooldown = gunSO.attackCooldown;
             }
         }
+        if (!isActive) return;
+        Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        gunModel.transform.LookAt(ray.GetPoint(50f));
     }
 
     public virtual void OnSelect()
     {
-
+        gunModel.SetActive(true);
+        isActive = true;
     }
 
     public virtual void OnDeselect()
     {
+        gunModel.SetActive(false);
         isAttacking = false;
+        isActive = false;
     }
 
     public virtual void OnAttackStart()
@@ -46,7 +55,7 @@ public abstract class GunClass : MonoBehaviour
         if (currentAttackCooldown <= 0)
         {
             Attack();
-            currentAttackCooldown = defenseSO.attackCooldown;
+            currentAttackCooldown = gunSO.attackCooldown;
         }
         isAttacking = true;
     }

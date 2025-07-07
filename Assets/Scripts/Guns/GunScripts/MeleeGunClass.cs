@@ -1,45 +1,39 @@
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
+using System.Collections;
 
 public class MeleeGunClass : GunClass
 {
-    //public DefenseDetectionRangeScript detectionRange; deteccion melee o bulletPrefab
-    //[SerializeField] protected GameObject defenseModel; gunSpawn municion
+    public GameObject hitbox;
+
+    [SerializeField] protected float hitboxTime;
 
     protected override void Awake()
     {
-        isAttacking = false;
-        currentLevel = 1;
-        currentAttackCooldown = defenseSO.attackCooldown;
-        damageMultiplier = 1f;
+        base.Awake();
+        hitbox.GetComponent<EnemyDamageArea>().SetValues(gameObject, gunSO.damage, false);
     }
 
     public override void OnSelect()
     {
+        base.OnSelect();
 
     }
 
     public override void OnDeselect()
     {
-        isAttacking = false;
-    }
-
-    public override void OnAttackStart()
-    {
-        if (currentAttackCooldown <= 0)
-        {
-            Attack();
-            currentAttackCooldown = defenseSO.attackCooldown;
-        }
-        isAttacking = true;
-    }
-
-    public override void OnAttackEnd()
-    {
-        isAttacking = false;
+        base.OnDeselect();
     }
 
     public override void Attack()
     {
+        StartCoroutine(ActivateMeleeHitbox());
+    }
 
+    protected virtual IEnumerator ActivateMeleeHitbox()
+    {
+        hitbox.SetActive(true);
+        yield return new WaitForSeconds(hitboxTime);
+        hitbox.SetActive(false);
     }
 }

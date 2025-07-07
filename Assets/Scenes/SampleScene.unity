@@ -1956,8 +1956,7 @@ Transform:
   m_LocalPosition: {x: 0.558, y: -0.53199977, z: 0.14499998}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1058190028}
+  m_Children: []
   m_Father: {fileID: 330585546}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &762164861
@@ -2480,37 +2479,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 17.5}
   m_SizeDelta: {x: 80, y: -67}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &1058190027
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1058190028}
-  m_Layer: 6
-  m_Name: GunCannon
-  m_TagString: Untagged
-  m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1058190028
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1058190027}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.734}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 754519236}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1059890213
 GameObject:
   m_ObjectHideFlags: 0
@@ -3954,7 +3922,7 @@ MonoBehaviour:
   gunSlots: 3
   maxBuildingRange: 5
   previewSpot: {fileID: 1499024272}
-  gunCannon: {fileID: 1058190028}
+  gunCannon: {fileID: 0}
   mapLayer:
     serializedVersion: 2
     m_Bits: 1
@@ -3976,6 +3944,17 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6c5598b9e39f5424f9b319c9644b6a54, type: 2}
   - {fileID: 11400000, guid: be9631dc1fa98964980d96c627e9955f, type: 2}
   - {fileID: 11400000, guid: adcf27e1d3d4122449e3a3b1fd16cb9a, type: 2}
+  defensePreviews:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &1639009009
 MonoBehaviour:
   m_ObjectHideFlags: 0
