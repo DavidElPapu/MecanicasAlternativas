@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6873494502561782950}
   - component: {fileID: 3763446179936393476}
+  - component: {fileID: 3084898415951260547}
   m_Layer: 0
   m_Name: DamageArea
   m_TagString: Untagged
@@ -25,12 +26,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5344110447532668282}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.75}
-  m_LocalScale: {x: 0.25, y: 0.25, z: 1.25}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.9996003}
+  m_LocalScale: {x: 2.5, y: 2.5, z: 2.4975023}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 7813713954655046300}
+  m_Father: {fileID: 3040213212448166143}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &3763446179936393476
 BoxCollider:
@@ -47,12 +48,24 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3084898415951260547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5344110447532668282}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db651706baca1d74ebb7b7e2bb93f011, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5747962550047611375
 GameObject:
   m_ObjectHideFlags: 0
@@ -63,7 +76,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3040213212448166143}
   - component: {fileID: 8082274216331343640}
-  - component: {fileID: 6604298615948392186}
   - component: {fileID: 158643819718064223}
   m_Layer: 0
   m_Name: KnifeModel
@@ -81,10 +93,11 @@ Transform:
   m_GameObject: {fileID: 5747962550047611375}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 1}
+  m_LocalPosition: {x: -0, y: 0, z: 0.2497}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.5005}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 6873494502561782950}
   m_Father: {fileID: 7813713954655046300}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &8082274216331343640
@@ -95,27 +108,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5747962550047611375}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!65 &6604298615948392186
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5747962550047611375}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &158643819718064223
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -187,12 +179,11 @@ Transform:
   m_GameObject: {fileID: 9194794759584659906}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.604, y: 5.56, z: 0.72}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3040213212448166143}
-  - {fileID: 6873494502561782950}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3537812111266334156

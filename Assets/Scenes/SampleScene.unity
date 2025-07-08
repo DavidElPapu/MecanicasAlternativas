@@ -1953,7 +1953,7 @@ Transform:
   m_GameObject: {fileID: 754519235}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.558, y: -0.53199977, z: 0.14499998}
+  m_LocalPosition: {x: 0.6, y: -0.5, z: 0.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3919,10 +3919,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defenseSlots: 2
-  gunSlots: 3
+  gunSlots: 1
   maxBuildingRange: 5
   previewSpot: {fileID: 1499024272}
-  gunCannon: {fileID: 0}
+  gunHolder: {fileID: 754519236}
   mapLayer:
     serializedVersion: 2
     m_Bits: 1
@@ -3940,10 +3940,10 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  equippedGunsSO:
-  - {fileID: 11400000, guid: 6c5598b9e39f5424f9b319c9644b6a54, type: 2}
-  - {fileID: 11400000, guid: be9631dc1fa98964980d96c627e9955f, type: 2}
-  - {fileID: 11400000, guid: adcf27e1d3d4122449e3a3b1fd16cb9a, type: 2}
+  equippedGunsPrefabs:
+  - {fileID: 9194794759584659906, guid: ce1f412a79591f2458ea4c5a17ee3aff, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
   defensePreviews:
   - {fileID: 0}
   - {fileID: 0}

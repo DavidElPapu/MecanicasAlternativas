@@ -20,6 +20,6 @@ MonoBehaviour:
   bulletPrefab: {fileID: 0}
   damage: 10
   attackCooldown: 1
-  range: 0
+  range: 1.5
   bulletSpeed: 0
   bulletLifeTime: 0

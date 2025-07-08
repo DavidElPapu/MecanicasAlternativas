@@ -6,7 +6,7 @@ public class PlayerActions : MonoBehaviour
     public int defenseSlots, gunSlots;
     public float maxBuildingRange;
     public Transform previewSpot;
-    public Transform gunCannon;
+    public Transform gunHolder;
     public LayerMask mapLayer;
     public Grid mapGrid;
     public EconomySystem economySystem;
@@ -265,24 +265,23 @@ public class PlayerActions : MonoBehaviour
         }
     }
 
-    private void ToggleGuns(bool createPreviews)
+    private void ToggleGunObjects(bool createGunObjects)
     {
         //aca para crear armas, no cambiar aun
-        for (int i = 0; i < defenseSlots; i++)
+        for (int i = 0; i < gunSlots; i++)
         {
-            if (createPreviews)
+            if (createGunObjects)
             {
-                GameObject newPreview = Instantiate(equippedDefensesPrefabs[i], new Vector3(0, 0, 0), defaultRotation);
-                defensePreviews[i] = newPreview;
-                newPreview.SetActive(false);
+                GameObject newGunObject = Instantiate(equippedGunsPrefabs[i], gunHolder.position, gunHolder.rotation, gunHolder);
+                gunScripts[i] = newGunObject.GetComponent<GunClass>();
+                gunScripts[i].OnDeselect();
                 if (i == currentSelectionIndex)
-                    newPreview.SetActive(true);
-                //ChangePreviewColor();
+                    gunScripts[i].OnSelect(false);
             }
             else
             {
-                Destroy(defensePreviews[i]);
-                defensePreviews[i] = null;
+                Destroy(gunScripts[i].gameObject);
+                gunScripts[i] = null;
             }
         }
     }
@@ -296,6 +295,7 @@ public class PlayerActions : MonoBehaviour
             currentSelectionIndex = lastGunIndex;
             currentSelectionLimit = gunSlots;
             ToggleDefensePreviews(false);
+            ToggleGunObjects(true);
         }
         else
         {
@@ -305,6 +305,7 @@ public class PlayerActions : MonoBehaviour
             defenseOnLeftClickAction = DefenseAction.None;
             defenseOnRightClickAction = DefenseAction.None;
             ToggleDefensePreviews(true);
+            ToggleGunObjects(false);
             isBuilding = true;
         }
     }

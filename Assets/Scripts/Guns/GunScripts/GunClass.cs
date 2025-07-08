@@ -15,10 +15,12 @@ public abstract class GunClass : MonoBehaviour
     protected virtual void Awake()
     {
         isAttacking = false;
+        isActive = false;
         currentLevel = 1;
-        currentAttackCooldown = gunSO.attackCooldown;
+        currentAttackCooldown = 0f;
         damageMultiplier = 1f;
-        OnDeselect();
+        Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        gunModel.transform.LookAt(ray.GetPoint(gunSO.range));
     }
 
     protected virtual void Update()
@@ -32,22 +34,21 @@ public abstract class GunClass : MonoBehaviour
                 currentAttackCooldown = gunSO.attackCooldown;
             }
         }
-        if (!isActive) return;
-        Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-        gunModel.transform.LookAt(ray.GetPoint(50f));
     }
 
-    public virtual void OnSelect()
+    public virtual void OnSelect(bool wasAttacking)
     {
         gunModel.SetActive(true);
         isActive = true;
+        if (wasAttacking)
+            OnAttackStart();
     }
 
     public virtual void OnDeselect()
     {
         gunModel.SetActive(false);
-        isAttacking = false;
         isActive = false;
+        isAttacking = false;
     }
 
     public virtual void OnAttackStart()

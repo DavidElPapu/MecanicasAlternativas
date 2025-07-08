@@ -17,6 +17,7 @@ public class EnemyDamageArea : MonoBehaviour
         this.owner = owner;
         this.damage = damage;
         this.destroyOnHit = destroyOnHit;
+        hasValues = true;
     }
 
     private void OnTriggerEnter(Collider other)

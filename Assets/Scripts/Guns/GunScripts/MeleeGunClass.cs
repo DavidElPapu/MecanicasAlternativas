@@ -5,24 +5,18 @@ using System.Collections;
 public class MeleeGunClass : GunClass
 {
     public GameObject hitbox;
-
     [SerializeField] protected float hitboxTime;
 
-    protected override void Awake()
+    protected virtual void Start()
     {
-        base.Awake();
         hitbox.GetComponent<EnemyDamageArea>().SetValues(gameObject, gunSO.damage, false);
-    }
-
-    public override void OnSelect()
-    {
-        base.OnSelect();
-
+        hitbox.SetActive(false);
     }
 
     public override void OnDeselect()
     {
         base.OnDeselect();
+        hitbox.SetActive(false);
     }
 
     public override void Attack()
