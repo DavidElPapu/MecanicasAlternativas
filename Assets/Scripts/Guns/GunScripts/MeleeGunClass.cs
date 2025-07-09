@@ -9,7 +9,7 @@ public class MeleeGunClass : GunClass
 
     protected virtual void Start()
     {
-        hitbox.GetComponent<EnemyDamageArea>().SetValues(gameObject, gunSO.damage, false);
+        hitbox.GetComponent<EnemyDamageArea>().SetValues(null, gunSO.damage, false, 0f);
         hitbox.SetActive(false);
     }
 

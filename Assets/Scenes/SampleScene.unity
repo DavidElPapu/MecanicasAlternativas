@@ -3941,7 +3941,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   equippedGunsPrefabs:
-  - {fileID: 9194794759584659906, guid: ce1f412a79591f2458ea4c5a17ee3aff, type: 3}
+  - {fileID: 9194794759584659906, guid: ce2718c7eabb62841b7abf9355a7c177, type: 3}
   - {fileID: 0}
   - {fileID: 0}
   defensePreviews:

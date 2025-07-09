@@ -12,11 +12,13 @@ public class EnemyDamageArea : MonoBehaviour
         hasValues = false;
     }
 
-    public void SetValues(GameObject owner, float damage, bool destroyOnHit)
+    public void SetValues(GameObject owner, float damage, bool destroyOnHit, float lifeTime)
     {
         this.owner = owner;
         this.damage = damage;
         this.destroyOnHit = destroyOnHit;
+        if (lifeTime > 0)
+            Destroy(gameObject, lifeTime);
         hasValues = true;
     }
 

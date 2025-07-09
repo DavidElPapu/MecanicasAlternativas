@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6d3366cf5b6b0e64ab95ecfca21e01b5, type: 3}
-  m_Name: KnifeGun
+  m_Name: PistolGun
   m_EditorClassIdentifier: 
-  gunName: Knife
+  gunName: Pistol
   description: 
   layer:
     serializedVersion: 2
     m_Bits: 1
   bulletPrefab: {fileID: 0}
-  damage: 10
-  attackCooldown: 0.5
-  range: 1.5
+  damage: 20
+  attackCooldown: 1
+  range: 50
   bulletSpeed: 0
   bulletLifeTime: 0
