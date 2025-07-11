@@ -14,12 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gunName: Knife
   description: 
-  layer:
+  icon: {fileID: 0}
+  collisionLayer:
     serializedVersion: 2
     m_Bits: 1
-  bulletPrefab: {fileID: 0}
   damage: 10
   attackCooldown: 0.5
   range: 1.5
-  bulletSpeed: 0
-  bulletLifeTime: 0

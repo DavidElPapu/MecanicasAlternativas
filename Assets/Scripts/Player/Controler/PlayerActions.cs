@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class PlayerActions : MonoBehaviour
 {
@@ -20,6 +22,12 @@ public class PlayerActions : MonoBehaviour
     [SerializeField] private GameObject[] defensePreviews = new GameObject[10];
     private GunClass[] gunScripts = new GunClass[3];
     private GridData mapGridData;
+    [Header("UI")]
+    public GameObject previewInfoCanvas;
+    public Sprite[] previewInfoImages = new Sprite[4];
+    public Image previewInfoImage;
+    public TextMeshProUGUI previewInfoText1, previewInfoText2;
+
     private enum DefenseAction
     {
         None,
@@ -30,7 +38,6 @@ public class PlayerActions : MonoBehaviour
     }
     private DefenseAction defenseOnLeftClickAction, defenseOnRightClickAction;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         isBuilding = true;
@@ -52,7 +59,6 @@ public class PlayerActions : MonoBehaviour
         ToggleDefensePreviews(true);
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (!isAlive)
@@ -83,6 +89,7 @@ public class PlayerActions : MonoBehaviour
         {
             MovePreview();
             AdjustPreviewSpot();
+            previewInfoCanvas.transform.LookAt(Camera.main.transform.position);
         }
     }
 
@@ -103,6 +110,11 @@ public class PlayerActions : MonoBehaviour
         {
             ToggleDefensePreviews(false);
         }
+        else
+        {
+            if (Input.GetKey(KeyCode.Mouse0))
+                gunScripts[currentSelectionIndex].OnAttackEnd();
+        }
     }
 
     private void OnRevive()
@@ -115,6 +127,8 @@ public class PlayerActions : MonoBehaviour
             ToggleDefensePreviews(true);
         }
     }
+
+    #region DefenseFunctions
 
     private void BuildOrUpgrade()
     {
@@ -172,7 +186,12 @@ public class PlayerActions : MonoBehaviour
         defenseOnLeftClickAction = DefenseAction.None;
         defenseOnRightClickAction = DefenseAction.None;
         if(cellState == ObjectData.CellState.Unavailable)
+        {
             myDefenseScript.ChangeModelMaterials(Color.red);
+            previewInfoText1.text = "";
+            previewInfoText2.text = "No Disponible";
+            previewInfoText2.color = Color.red;
+        }
         else if(cellState == ObjectData.CellState.Defese)
         {
             defensePreviews[currentSelectionIndex].SetActive(false);
@@ -184,14 +203,26 @@ public class PlayerActions : MonoBehaviour
                 if (otherDefenseScript.GetCurrentLevel() < otherDefenseScript.defenseSO.levelPrices.Count)
                 {
                     if (economySystem.GetCurrentMoney() >= otherDefenseScript.defenseSO.levelPrices[otherDefenseScript.GetCurrentLevel()])
+                    {
                         defenseOnLeftClickAction = DefenseAction.Upgrade;
+                        previewInfoText1.text = "Click Izquierdo: Mejorar a nivel " + (otherDefenseScript.GetCurrentLevel() + 1).ToString() + " ($" + otherDefenseScript.defenseSO.levelPrices[otherDefenseScript.GetCurrentLevel()].ToString() + ")";
+                        previewInfoText1.color = Color.green;
+                    }
+                    else
+                    {
+                        previewInfoText1.text = "Dinero Insuficiente para mejora ($" + otherDefenseScript.defenseSO.levelPrices[otherDefenseScript.GetCurrentLevel()].ToString() + ")";
+                        previewInfoText1.color = Color.yellow;
+                    }
                 }
                 else
                 {
-                    //esta al nivel max
+                    previewInfoText1.text = "Nivel Maximo";
+                    previewInfoText1.color = Color.yellow;
                 }
             }
             defenseOnRightClickAction = DefenseAction.Delete;
+            previewInfoText2.text = "Click Derecho: Borrar Defensa";
+            previewInfoText2.color = Color.black;
         }
         else
         {
@@ -201,27 +232,36 @@ public class PlayerActions : MonoBehaviour
                 {
                     myDefenseScript.ChangeModelMaterials(Color.green);
                     defenseOnLeftClickAction = DefenseAction.Build;
+                    previewInfoText1.text = "Click Izquierdo: Construir Defensa ($" + myDefenseScript.defenseSO.levelPrices[myDefenseScript.GetCurrentLevel()].ToString() + ")";
+                    previewInfoText1.color = Color.green;
                 }
                 else
+                {
                     myDefenseScript.ChangeModelMaterials(Color.yellow);
+                    previewInfoText1.text = "Dinero Insuficiente para construir ($" + myDefenseScript.defenseSO.levelPrices[myDefenseScript.GetCurrentLevel()].ToString() + ")";
+                    previewInfoText1.color = Color.yellow;
+                }
                 defenseOnRightClickAction = DefenseAction.Rotate;
+                previewInfoText2.text = "Click Derecho: Rotar Defensa";
+                previewInfoText2.color = Color.black;
             }
             else
-                myDefenseScript.ChangeModelMaterials(Color.red);
+            {
+                myDefenseScript.ChangeModelMaterials(Color.yellow);
+                previewInfoText1.text = "";
+                previewInfoText2.text = "Locacion Invalida";
+                previewInfoText2.color = Color.yellow;
+            }
         }
     }
 
     private void AdjustPreviewSpot()
     {
-        Vector3 rayDirection = previewSpot.position - transform.position;
-        if (Physics.Raycast(transform.position, rayDirection.normalized, out RaycastHit hit, maxBuildingRange, mapLayer, QueryTriggerInteraction.Ignore))
-        {
-            previewSpot.position = hit.point;
-        }
+        Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        if (Physics.Raycast(ray, out RaycastHit hit, maxBuildingRange, mapLayer, QueryTriggerInteraction.Ignore))
+            previewSpot.localPosition = new Vector3(0, 0, hit.distance - 0.5f);
         else
-        {
             previewSpot.localPosition = new Vector3(0, 0, maxBuildingRange);
-        }
     }
 
     private void MovePreview()
@@ -265,9 +305,12 @@ public class PlayerActions : MonoBehaviour
         }
     }
 
+    #endregion
+
+    #region GunFunctions
+
     private void ToggleGunObjects(bool createGunObjects)
     {
-        //aca para crear armas, no cambiar aun
         for (int i = 0; i < gunSlots; i++)
         {
             if (createGunObjects)
@@ -286,6 +329,16 @@ public class PlayerActions : MonoBehaviour
         }
     }
 
+    private void SwitchGun()
+    {
+        if (lastSelectionIndex == currentSelectionIndex)
+            return;
+        gunScripts[lastSelectionIndex].OnDeselect();
+        gunScripts[currentSelectionIndex].OnSelect(Input.GetKey(KeyCode.Mouse0));
+    }
+
+    #endregion
+
     private void SwitchMode()
     {
         if (isBuilding)
@@ -296,6 +349,7 @@ public class PlayerActions : MonoBehaviour
             currentSelectionLimit = gunSlots;
             ToggleDefensePreviews(false);
             ToggleGunObjects(true);
+            previewInfoCanvas.SetActive(false);
         }
         else
         {
@@ -306,6 +360,7 @@ public class PlayerActions : MonoBehaviour
             defenseOnRightClickAction = DefenseAction.None;
             ToggleDefensePreviews(true);
             ToggleGunObjects(false);
+            previewInfoCanvas.SetActive(true);
             isBuilding = true;
         }
     }
@@ -326,5 +381,7 @@ public class PlayerActions : MonoBehaviour
         //Si construlle, llama el cambio de defensa
         if (isBuilding)
             SwitchDefensePreview();
+        else
+            SwitchGun();
     }
 }

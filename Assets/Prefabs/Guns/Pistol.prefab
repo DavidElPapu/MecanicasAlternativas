@@ -253,6 +253,6 @@ MonoBehaviour:
   gunSO: {fileID: 11400000, guid: 986e6ef64041e404099cec18588f88d3, type: 2}
   gunModel: {fileID: 1355063836743853794}
   gunIcon: {fileID: 0}
-  enemyLayer:
+  colisionLayer:
     serializedVersion: 2
     m_Bits: 1

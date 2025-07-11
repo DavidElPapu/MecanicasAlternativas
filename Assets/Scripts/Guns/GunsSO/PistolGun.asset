@@ -14,12 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gunName: Pistol
   description: 
-  layer:
+  icon: {fileID: 0}
+  collisionLayer:
     serializedVersion: 2
     m_Bits: 1
-  bulletPrefab: {fileID: 0}
   damage: 20
   attackCooldown: 1
   range: 50
-  bulletSpeed: 0
-  bulletLifeTime: 0

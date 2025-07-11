@@ -2,17 +2,17 @@ using UnityEngine;
 
 public class EnemyDamageArea : MonoBehaviour
 {
-    private GameObject owner;
-    private float damage;
-    private bool destroyOnHit, hasValues;
+    protected GameObject owner;
+    protected float damage;
+    protected bool destroyOnHit, hasValues;
 
 
-    private void Awake()
+    protected virtual void Awake()
     {
         hasValues = false;
     }
 
-    public void SetValues(GameObject owner, float damage, bool destroyOnHit, float lifeTime)
+    public virtual void SetValues(GameObject owner, float damage, bool destroyOnHit, float lifeTime)
     {
         this.owner = owner;
         this.damage = damage;
@@ -22,15 +22,15 @@ public class EnemyDamageArea : MonoBehaviour
         hasValues = true;
     }
 
-    private void OnTriggerEnter(Collider other)
+    protected virtual void OnTriggerEnter(Collider other)
     {
         if (!hasValues) return;
 
         if (other.gameObject.CompareTag("Enemy"))
         {
             other.gameObject.GetComponent<EnemyClass>().TakeDamage(damage, owner);
-            if (destroyOnHit)
-                Destroy(this.gameObject);
         }
+        if (destroyOnHit && !other.isTrigger)
+            Destroy(this.gameObject);
     } 
 }

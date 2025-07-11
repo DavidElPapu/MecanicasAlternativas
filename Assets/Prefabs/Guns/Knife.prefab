@@ -201,5 +201,8 @@ MonoBehaviour:
   gunSO: {fileID: 11400000, guid: 2a7cb3eb52099b6469090a593fbf3d5e, type: 2}
   gunModel: {fileID: 5747962550047611375}
   gunIcon: {fileID: 0}
+  colisionLayer:
+    serializedVersion: 2
+    m_Bits: 1
   hitbox: {fileID: 5344110447532668282}
   hitboxTime: 0.05

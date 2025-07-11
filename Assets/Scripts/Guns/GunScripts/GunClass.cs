@@ -5,7 +5,6 @@ public abstract class GunClass : MonoBehaviour
 {
     public GunSO gunSO;
     public GameObject gunModel;
-    public Sprite gunIcon;
     //public DefenseDetectionRangeScript detectionRange; deteccion melee o bulletPrefab
     protected bool isAttacking, isActive;
     protected int currentLevel;
@@ -19,8 +18,6 @@ public abstract class GunClass : MonoBehaviour
         currentLevel = 1;
         currentAttackCooldown = 0f;
         damageMultiplier = 1f;
-        Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-        gunModel.transform.LookAt(ray.GetPoint(gunSO.range));
     }
 
     protected virtual void Update()
@@ -33,6 +30,15 @@ public abstract class GunClass : MonoBehaviour
                 Attack();
                 currentAttackCooldown = gunSO.attackCooldown;
             }
+        }
+        if (isActive)
+        {
+            Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+            if (Physics.Raycast(ray, out RaycastHit hit, gunSO.range, gunSO.collisionLayer, QueryTriggerInteraction.Ignore))
+                gunModel.transform.LookAt(hit.point);
+            else
+                gunModel.transform.LookAt(ray.GetPoint(gunSO.range));
+
         }
     }
 
