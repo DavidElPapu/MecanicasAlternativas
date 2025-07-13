@@ -24,7 +24,7 @@ public class PlayerActions : MonoBehaviour
     private GridData mapGridData;
     [Header("UI")]
     public GameObject previewInfoCanvas;
-    public Sprite[] previewInfoImages = new Sprite[4];
+    public Sprite[] previewInfoImages = new Sprite[6];
     public Image previewInfoImage;
     public TextMeshProUGUI previewInfoText1, previewInfoText2;
 
@@ -139,14 +139,14 @@ public class PlayerActions : MonoBehaviour
         {
             GameObject newDefense = Instantiate(equippedDefensesPrefabs[currentSelectionIndex], mapGrid.CellToWorld(currentPreviewGridPos), defaultRotation);
             DefenseClass newDefenseScript = newDefense.GetComponent<DefenseClass>();
-            mapGridData.AddObjectAt(currentPreviewGridPos, newDefenseScript.defenseSO.size, ObjectData.CellState.Defese, newDefense);
-            economySystem.ChangeCurrentMoney(-newDefenseScript.defenseSO.levelPrices[newDefenseScript.GetCurrentLevel()]);
+            mapGridData.AddObjectAt(currentPreviewGridPos, newDefenseScript.size, ObjectData.CellState.Defese, newDefense);
+            economySystem.ChangeCurrentMoney(-newDefenseScript.defenseLevels[newDefenseScript.GetCurrentLevel()].price);
             newDefenseScript.OnPlacing();
         }
         else if (defenseOnLeftClickAction == DefenseAction.Upgrade)
         {
             DefenseClass otherDefenseScript = mapGridData.GetDefenseScriptAt(currentPreviewGridPos);
-            economySystem.ChangeCurrentMoney(-otherDefenseScript.defenseSO.levelPrices[otherDefenseScript.GetCurrentLevel()]);
+            economySystem.ChangeCurrentMoney(-otherDefenseScript.defenseLevels[otherDefenseScript.GetCurrentLevel() + 1].price);
             otherDefenseScript.OnUpgrading();
 
         }
@@ -166,11 +166,11 @@ public class PlayerActions : MonoBehaviour
             Vector3Int currentPreviewGridPos = mapGrid.WorldToCell(previewSpot.position);
             DefenseClass otherDefenseScript = mapGridData.GetDefenseScriptAt(currentPreviewGridPos);
             int returnCash = 0;
-            for (int i = 0; i < otherDefenseScript.GetCurrentLevel(); i++)
+            for (int i = 0; i <= otherDefenseScript.GetCurrentLevel(); i++)
             {
-                returnCash += otherDefenseScript.defenseSO.levelPrices[i];
+                returnCash += otherDefenseScript.defenseLevels[i].price;
             }
-            mapGridData.RemoveObjectAt(currentPreviewGridPos, otherDefenseScript.defenseSO.size);
+            mapGridData.RemoveObjectAt(currentPreviewGridPos, otherDefenseScript.size);
             economySystem.ChangeCurrentMoney(returnCash);
             otherDefenseScript.OnDeleting();
         }
@@ -181,7 +181,7 @@ public class PlayerActions : MonoBehaviour
     {
         Vector3Int currentPreviewGridPos = mapGrid.WorldToCell(previewSpot.position);
         DefenseClass myDefenseScript = defensePreviews[currentSelectionIndex].GetComponent<DefenseClass>();
-        ObjectData.CellState cellState = mapGridData.GetCellStateAt(currentPreviewGridPos, myDefenseScript.defenseSO.size);
+        ObjectData.CellState cellState = mapGridData.GetCellStateAt(currentPreviewGridPos, myDefenseScript.size);
         defensePreviews[currentSelectionIndex].SetActive(true);
         defenseOnLeftClickAction = DefenseAction.None;
         defenseOnRightClickAction = DefenseAction.None;
@@ -191,6 +191,7 @@ public class PlayerActions : MonoBehaviour
             previewInfoText1.text = "";
             previewInfoText2.text = "No Disponible";
             previewInfoText2.color = Color.red;
+            previewInfoImage.sprite = previewInfoImages[0];
         }
         else if(cellState == ObjectData.CellState.Defese)
         {
@@ -198,26 +199,29 @@ public class PlayerActions : MonoBehaviour
             DefenseClass otherDefenseScript = mapGridData.GetDefenseScriptAt(currentPreviewGridPos);
             if (otherDefenseScript == null)
                 print("esto no deberia pasar");
-            if (otherDefenseScript.defenseSO.defenseName == myDefenseScript.defenseSO.defenseName)
+            if (otherDefenseScript.defenseName == myDefenseScript.defenseName)
             {
-                if (otherDefenseScript.GetCurrentLevel() < otherDefenseScript.defenseSO.levelPrices.Count)
+                if (otherDefenseScript.CanBeUpgraded())
                 {
-                    if (economySystem.GetCurrentMoney() >= otherDefenseScript.defenseSO.levelPrices[otherDefenseScript.GetCurrentLevel()])
+                    if (economySystem.GetCurrentMoney() >= otherDefenseScript.GetUpgradePrice())
                     {
                         defenseOnLeftClickAction = DefenseAction.Upgrade;
-                        previewInfoText1.text = "Click Izquierdo: Mejorar a nivel " + (otherDefenseScript.GetCurrentLevel() + 1).ToString() + " ($" + otherDefenseScript.defenseSO.levelPrices[otherDefenseScript.GetCurrentLevel()].ToString() + ")";
+                        previewInfoText1.text = "Click Izquierdo: Mejorar a nivel " + (otherDefenseScript.GetCurrentLevel() + 2).ToString() + " ($" + otherDefenseScript.GetUpgradePrice().ToString() + ")";
                         previewInfoText1.color = Color.green;
+                        previewInfoImage.sprite = previewInfoImages[3];
                     }
                     else
                     {
-                        previewInfoText1.text = "Dinero Insuficiente para mejora ($" + otherDefenseScript.defenseSO.levelPrices[otherDefenseScript.GetCurrentLevel()].ToString() + ")";
+                        previewInfoText1.text = "Dinero Insuficiente para mejora ($" + otherDefenseScript.GetUpgradePrice().ToString() + ")";
                         previewInfoText1.color = Color.yellow;
+                        previewInfoImage.sprite = previewInfoImages[5];
                     }
                 }
                 else
                 {
                     previewInfoText1.text = "Nivel Maximo";
                     previewInfoText1.color = Color.yellow;
+                    previewInfoImage.sprite = previewInfoImages[4];
                 }
             }
             defenseOnRightClickAction = DefenseAction.Delete;
@@ -226,20 +230,22 @@ public class PlayerActions : MonoBehaviour
         }
         else
         {
-            if (myDefenseScript.defenseSO.validCells.Contains(cellState))
+            if (myDefenseScript.validCells.Contains(cellState))
             {
-                if (economySystem.GetCurrentMoney() >= myDefenseScript.defenseSO.levelPrices[myDefenseScript.GetCurrentLevel()])
+                if (economySystem.GetCurrentMoney() >= myDefenseScript.defenseLevels[myDefenseScript.GetCurrentLevel()].price)
                 {
                     myDefenseScript.ChangeModelMaterials(Color.green);
                     defenseOnLeftClickAction = DefenseAction.Build;
-                    previewInfoText1.text = "Click Izquierdo: Construir Defensa ($" + myDefenseScript.defenseSO.levelPrices[myDefenseScript.GetCurrentLevel()].ToString() + ")";
+                    previewInfoText1.text = "Click Izquierdo: Construir Defensa ($" + myDefenseScript.defenseLevels[myDefenseScript.GetCurrentLevel()].price.ToString() + ")";
                     previewInfoText1.color = Color.green;
+                    previewInfoImage.sprite = previewInfoImages[1];
                 }
                 else
                 {
                     myDefenseScript.ChangeModelMaterials(Color.yellow);
-                    previewInfoText1.text = "Dinero Insuficiente para construir ($" + myDefenseScript.defenseSO.levelPrices[myDefenseScript.GetCurrentLevel()].ToString() + ")";
+                    previewInfoText1.text = "Dinero Insuficiente para construir ($" + myDefenseScript.defenseLevels[myDefenseScript.GetCurrentLevel()].price.ToString() + ")";
                     previewInfoText1.color = Color.yellow;
+                    previewInfoImage.sprite = previewInfoImages[5];
                 }
                 defenseOnRightClickAction = DefenseAction.Rotate;
                 previewInfoText2.text = "Click Derecho: Rotar Defensa";
@@ -251,6 +257,7 @@ public class PlayerActions : MonoBehaviour
                 previewInfoText1.text = "";
                 previewInfoText2.text = "Locacion Invalida";
                 previewInfoText2.color = Color.yellow;
+                previewInfoImage.sprite = previewInfoImages[2];
             }
         }
     }

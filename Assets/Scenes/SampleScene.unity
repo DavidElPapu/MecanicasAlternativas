@@ -4230,11 +4230,13 @@ MonoBehaviour:
   - {fileID: 0}
   previewInfoCanvas: {fileID: 1909291458}
   previewInfoImages:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  previewInfoImage: {fileID: 0}
+  - {fileID: 21300000, guid: bb47fd154b7abdb4fab5fdde85fb3415, type: 3}
+  - {fileID: 21300000, guid: b4ae290c4f91b054395cd8ba86e75077, type: 3}
+  - {fileID: 21300000, guid: 0b1d98954f6374a4783a9d1907849a51, type: 3}
+  - {fileID: 21300000, guid: 684fa7322fb2e884eaf94a05cd8be5c5, type: 3}
+  - {fileID: 21300000, guid: c6d94883f631f914290d83494761b2f4, type: 3}
+  - {fileID: 21300000, guid: d9e788e58ece4744f869e83902fb49c1, type: 3}
+  previewInfoImage: {fileID: 1732968705}
   previewInfoText1: {fileID: 555442111}
   previewInfoText2: {fileID: 904896173}
 --- !u!114 &1639009009
@@ -4367,7 +4369,7 @@ GameObject:
   - component: {fileID: 1732968706}
   - component: {fileID: 1732968705}
   m_Layer: 6
-  m_Name: Image
+  m_Name: PreviewInfoImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4870,7 +4872,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0.75}
+  m_AnchoredPosition: {x: 0, y: 0.5}
   m_SizeDelta: {x: 6, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1909291460

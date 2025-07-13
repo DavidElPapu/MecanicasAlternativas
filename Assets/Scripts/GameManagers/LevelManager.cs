@@ -68,7 +68,7 @@ public class LevelManager : MonoBehaviour
         else
         {
             isOnBreak = true;
-            playerUI.ChangeWaveStatus("Descanzo");
+            playerUI.ChangeWaveStatus("Descanso");
             playerEconomy.ChangeCurrentMoney(levelData.cashWaveReward[currentWave]);
             OnBreakStart?.Invoke();
         }

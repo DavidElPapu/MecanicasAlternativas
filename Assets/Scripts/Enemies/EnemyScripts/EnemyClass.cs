@@ -98,7 +98,8 @@ public abstract class EnemyClass : MonoBehaviour
         }
         else if (damageDealer.CompareTag("Defense"))
         {
-            DefensesSO defenseData = damageDealer.GetComponent<DefenseClass>().defenseSO;
+            DefenseClass defenseScript = damageDealer.GetComponent<DefenseClass>();
+            DefensesSO defenseData = defenseScript.defenseLevels[defenseScript.GetCurrentLevel()];
             if (defenseData.appliedDebuffs.Count > 0)
             {
                 for (int i = 0; i < defenseData.appliedDebuffs.Count; i++)
