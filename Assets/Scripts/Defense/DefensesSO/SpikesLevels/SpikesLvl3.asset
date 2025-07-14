@@ -10,13 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 303ecf3f333177643b8ede74ebc4313e, type: 3}
-  m_Name: SpikesLvl1
+  m_Name: SpikesLvl3
   m_EditorClassIdentifier: 
-  price: 30
-  damage: 20
+  price: 50
+  damage: 80
   range: 0
   maxHealth: 0
-  mainCooldown: 2
-  appliedDebuffs: 
-  debuffsIntensities: []
-  debuffsTimes: []
+  mainCooldown: 7
+  appliedDebuffs: 00000000
+  debuffsIntensities:
+  - 0
+  debuffsTimes:
+  - 4

@@ -16,6 +16,12 @@ public class TrapDefenseClass : DefenseClass
         readyToActivate = true;
     }
 
+    public override void OnUpgrading()
+    {
+        base.OnUpgrading();
+        currentCooldown = defenseLevels[currentLevel].mainCooldown;
+    }
+
     protected override void Update()
     {
         if (!readyToActivate)
@@ -33,7 +39,8 @@ public class TrapDefenseClass : DefenseClass
 
     protected override void DoMainAction()
     {
-        CancelInvoke("DoMainAction");
+        if (IsInvoking("DoMainAction"))
+            CancelInvoke("DoMainAction");
         readyToActivate = false;
     }
 
