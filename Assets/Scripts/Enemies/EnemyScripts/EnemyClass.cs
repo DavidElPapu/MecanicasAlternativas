@@ -73,14 +73,14 @@ public abstract class EnemyClass : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (isOnFightMode)
+        if (isOnFightMode && !isStunned)
             Attack();
         MoveCanvasToCamera();
     }
 
     protected virtual void FixedUpdate()
     {
-        if (!isOnFightMode)
+        if (!isOnFightMode && !isStunned)
             Move();
     }
 
