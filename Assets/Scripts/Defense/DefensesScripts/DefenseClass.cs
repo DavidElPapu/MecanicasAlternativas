@@ -74,7 +74,6 @@ public abstract class DefenseClass : MonoBehaviour
         currentCooldown = defenseLevels[currentLevel].mainCooldown;
         damageMultiplier = 1f;
         currentTarget = null;
-        //defenseModel.GetComponent<BoxCollider>().isTrigger = false;
         foreach (MeshRenderer modelPartsRenderers in defenseModels[currentLevel].GetComponentsInChildren<MeshRenderer>())
         {
             modelPartsRenderers.material = defenseMAT;

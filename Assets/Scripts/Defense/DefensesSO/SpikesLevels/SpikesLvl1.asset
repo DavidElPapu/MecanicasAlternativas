@@ -10,17 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 303ecf3f333177643b8ede74ebc4313e, type: 3}
-  m_Name: TurretDefense
+  m_Name: SpikesLvl1
   m_EditorClassIdentifier: 
-  defenseName: Basic Turret
-  description: 
-  levelPrices: fa000000
-  size: {x: 1, y: 1, z: 1}
-  validCells: 02000000
-  damage: 5
-  health: 0
-  mainCooldown: 0.3
+  price: 50
+  damage: 10
+  range: 0
+  maxHealth: 0
+  mainCooldown: 0.5
   appliedDebuffs: 
   debuffsIntensities: []
   debuffsTimes: []
-  enemyInteraction: 3

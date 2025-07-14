@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class TrapDefense : DefenseClass
+public class TrapDefenseClass : DefenseClass
 {
     [SerializeField] protected float trapDelay;
     protected bool readyToActivate;
@@ -24,7 +24,7 @@ public class TrapDefense : DefenseClass
             if (currentCooldown <= 0)
             {
                 readyToActivate = true;
-                currentCooldown = defenseSO.mainCooldown;
+                currentCooldown = defenseLevels[currentLevel].mainCooldown;
                 if (targetsInRange.Count > 0)
                     Invoke("DoMainAction", trapDelay);
             }
@@ -35,18 +35,17 @@ public class TrapDefense : DefenseClass
     {
         CancelInvoke("DoMainAction");
         readyToActivate = false;
-
     }
 
     public override void OnTargetEnteredDetectionRange(GameObject target)
     {
         base.OnTargetEnteredDetectionRange(target);
-        Invoke("DoMainAction", trapDelay);
+        if (readyToActivate)
+            Invoke("DoMainAction", trapDelay);
     }
 
     public override void OnTargetLeftDetectionRange(GameObject target)
     {
         base.OnTargetLeftDetectionRange(target);
-        Invoke("DoMainAction", trapDelay);
     }
 }

@@ -13,7 +13,7 @@ public class TurretDefenseClass : DefenseClass
                 currentCooldown -= Time.deltaTime;
                 if (currentCooldown <= 0)
                 {
-                    currentCooldown = defenseSO.mainCooldown;
+                    currentCooldown = defenseLevels[currentLevel].mainCooldown;
                     TargetFirstEnemy();
                     DoMainAction();
                 }
@@ -31,7 +31,7 @@ public class TurretDefenseClass : DefenseClass
             {
                 if (hit.collider.gameObject.CompareTag("Enemy"))
                 {
-                    hit.collider.gameObject.GetComponent<EnemyClass>().TakeDamage(defenseSO.damage * damageMultiplier, gameObject);
+                    hit.collider.gameObject.GetComponent<EnemyClass>().TakeDamage(defenseLevels[currentLevel].damage * damageMultiplier, gameObject);
                 }
             }
         }

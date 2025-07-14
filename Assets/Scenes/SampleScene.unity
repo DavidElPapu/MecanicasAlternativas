@@ -296,10 +296,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5653ee935831dc644abf204acb979985, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defenseSO: {fileID: 0}
+  defenseName: 
+  description: 
+  icon: {fileID: 0}
+  size: {x: 1, y: 1, z: 1}
+  validCells: 
+  enemyInteraction: 0
+  defenseLevels: []
+  defenseModels: []
   detectionRange: {fileID: 0}
   defenseMAT: {fileID: 0}
-  defenseModel: {fileID: 0}
   previewMAT: {fileID: 0}
   levelManager: {fileID: 1524749326}
   maxBaseHealth: 100
@@ -4191,7 +4197,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24b497cd34fa873409cde3a3a780d75e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defenseSlots: 2
+  defenseSlots: 1
   gunSlots: 3
   maxBuildingRange: 6
   previewSpot: {fileID: 1499024272}
@@ -4203,8 +4209,8 @@ MonoBehaviour:
   economySystem: {fileID: 1639009009}
   mapGridDataManager: {fileID: 1524749325}
   equippedDefensesPrefabs:
-  - {fileID: 6970351787703872529, guid: c0a8c555f87d68c4daffc0b542cdb4e8, type: 3}
   - {fileID: 7114210511905106021, guid: 99cba0534160e354c9d2f19d1200f09b, type: 3}
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}

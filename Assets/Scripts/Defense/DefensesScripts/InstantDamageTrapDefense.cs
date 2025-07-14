@@ -1,14 +1,13 @@
 using UnityEngine;
 
-public class InstantDamageTrapDefense : TrapDefense
+public class InstantDamageTrapDefense : TrapDefenseClass
 {
     protected override void DoMainAction()
     {
-        CancelInvoke("DoMainAction");
-        readyToActivate = false;
+        base.DoMainAction();
         foreach (GameObject target in targetsInRange)
         {
-            target.GetComponent<EnemyClass>().TakeDamage(defenseSO.damage, gameObject);
+            target.GetComponent<EnemyClass>().TakeDamage(defenseLevels[currentLevel].damage * damageMultiplier, gameObject);
         }
     }
 }
