@@ -86,8 +86,8 @@ public abstract class EnemyClass : MonoBehaviour
 
     public virtual void OnDeath()
     {
-        Destroy(gameObject, 0.05f);
         EnemyDeath?.Invoke(gameObject);
+        Destroy(gameObject);
     }
 
     public virtual void TakeDamage(float damage, GameObject damageDealer)

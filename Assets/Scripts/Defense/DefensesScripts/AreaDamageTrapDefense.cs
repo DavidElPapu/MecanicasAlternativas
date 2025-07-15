@@ -11,7 +11,9 @@ public class AreaDamageTrapDefense : TrapDefenseClass
     public override void OnPlacing()
     {
         base.OnPlacing();
+        damageArea.SetActive(true);
         damageArea.GetComponent<EnemyDamageArea>().SetValues(gameObject, defenseLevels[currentLevel].damage, false, 0);
+        damageArea.SetActive(false);
     }
 
     protected override void OnRepair()
@@ -41,6 +43,9 @@ public class AreaDamageTrapDefense : TrapDefenseClass
     public override void OnUpgrading()
     {
         base.OnUpgrading();
+        damageArea.SetActive(true);
+        damageArea.GetComponent<EnemyDamageArea>().SetValues(gameObject, defenseLevels[currentLevel].damage, false, 0);
+        damageArea.SetActive(false);
         if (defenseLevels[currentLevel].range > 0)
             damageArea.transform.localScale = new Vector3(defenseLevels[currentLevel].range, defenseLevels[currentLevel].range, defenseLevels[currentLevel].range);
     }

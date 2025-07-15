@@ -6,7 +6,7 @@ using TMPro;
 public class PlayerActions : MonoBehaviour
 {
     public int defenseSlots, gunSlots;
-    public float maxBuildingRange;
+    public float maxBuildingRange, buildCooldown;
     public Transform previewSpot;
     public Transform gunHolder;
     public LayerMask mapLayer;
@@ -17,6 +17,7 @@ public class PlayerActions : MonoBehaviour
     public GameObject[] equippedGunsPrefabs = new GameObject[3];
     private bool isBuilding, isAlive;
     private int currentSelectionIndex, lastSelectionIndex, lastGunIndex, lastDefenseIndex, currentSelectionLimit;
+    private float buildCount;
     private Vector3Int lastPreviewGridPos;
     private Quaternion defaultRotation = Quaternion.identity;
     [SerializeField] private GameObject[] defensePreviews = new GameObject[10];
@@ -47,6 +48,7 @@ public class PlayerActions : MonoBehaviour
         lastGunIndex = 0;
         lastDefenseIndex = 0;
         currentSelectionLimit = defenseSlots;
+        buildCount = buildCooldown;
         lastPreviewGridPos = new Vector3Int(0, 0, 0);
         mapGridData = mapGridDataManager.mapGridData;
         defenseOnLeftClickAction = DefenseAction.None;
@@ -71,14 +73,26 @@ public class PlayerActions : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.Mouse0))
         {
             if (isBuilding)
-                BuildOrUpgrade();
+            {
+                if (buildCount <= 0)
+                {
+                    buildCount = buildCooldown;
+                    BuildOrUpgrade();
+                }
+            }
             else
                 gunScripts[currentSelectionIndex].OnAttackEnd();
         }
         if (Input.GetKeyUp(KeyCode.Mouse1))
         {
             if (isBuilding)
-                RotateOrDelete();
+            {
+                if (buildCount <= 0)
+                {
+                    buildCount = buildCooldown;
+                    RotateOrDelete();
+                }
+            }
         }
         
         float mouseScroll = Input.GetAxis("Mouse ScrollWheel");
@@ -90,6 +104,10 @@ public class PlayerActions : MonoBehaviour
             MovePreview();
             AdjustPreviewSpot();
             previewInfoCanvas.transform.LookAt(Camera.main.transform.position);
+            if (buildCount > 0)
+            {
+                buildCount -= Time.deltaTime;
+            }
         }
     }
 
@@ -146,6 +164,7 @@ public class PlayerActions : MonoBehaviour
         else if (defenseOnLeftClickAction == DefenseAction.Upgrade)
         {
             DefenseClass otherDefenseScript = mapGridData.GetDefenseScriptAt(currentPreviewGridPos);
+            if (otherDefenseScript == null) return;
             economySystem.ChangeCurrentMoney(-otherDefenseScript.defenseLevels[otherDefenseScript.GetCurrentLevel() + 1].price);
             otherDefenseScript.OnUpgrading();
 

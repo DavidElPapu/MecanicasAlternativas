@@ -338,6 +338,7 @@ GameObject:
   - component: {fileID: 7802733753878283968}
   - component: {fileID: 3518269332361494263}
   - component: {fileID: 1757821629155407679}
+  - component: {fileID: 9067396027677317868}
   m_Layer: 0
   m_Name: Explosion
   m_TagString: Untagged
@@ -355,7 +356,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.5, y: 0, z: 0.5}
-  m_LocalScale: {x: 5.5, y: 5.5, z: 5.5}
+  m_LocalScale: {x: 4, y: 4, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 807886894223647553}
@@ -434,6 +435,18 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &9067396027677317868
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3119864903900204900}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db651706baca1d74ebb7b7e2bb93f011, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4715177110137866836
 GameObject:
   m_ObjectHideFlags: 0
@@ -761,12 +774,18 @@ MonoBehaviour:
   size: {x: 1, y: 1, z: 1}
   validCells: 02000000
   enemyInteraction: 2
-  defenseLevels: []
-  defenseModels: []
+  defenseLevels:
+  - {fileID: 11400000, guid: 0e0db5df5bfc52e46812a1a9dba41e94, type: 2}
+  - {fileID: 11400000, guid: 3c8572db5026e7a4fbe14544c3e8949b, type: 2}
+  - {fileID: 11400000, guid: 28e5e7643e7836c45a8fede3c65a539b, type: 2}
+  defenseModels:
+  - {fileID: 2336433594113298065}
+  - {fileID: 5613592181460709260}
+  - {fileID: 40406136961875304}
   detectionRange: {fileID: 4886207860602283794}
   defenseMAT: {fileID: 2100000, guid: 6f1d3e07579c4804b9f06c25c7004b0c, type: 2}
   previewMAT: {fileID: 2100000, guid: bd376cb7de31ebf49a897a3fa73252da, type: 2}
-  trapDelay: 0.8
+  trapDelay: 0.3
   damageArea: {fileID: 3119864903900204900}
   areaTime: 0.5
   isOneTimeUse: 1

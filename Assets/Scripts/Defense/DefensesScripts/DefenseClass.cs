@@ -98,7 +98,7 @@ public abstract class DefenseClass : MonoBehaviour
     {
         if (isBroken)
             isBroken = false;
-        currentHealth = defenseLevels[0].maxHealth;
+        currentHealth = defenseLevels[currentLevel].maxHealth;
 
     }
 

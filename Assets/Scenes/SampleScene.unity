@@ -4197,9 +4197,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24b497cd34fa873409cde3a3a780d75e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defenseSlots: 2
+  defenseSlots: 3
   gunSlots: 3
   maxBuildingRange: 6
+  buildCooldown: 0.5
   previewSpot: {fileID: 1499024272}
   gunHolder: {fileID: 754519236}
   mapLayer:
@@ -4211,7 +4212,7 @@ MonoBehaviour:
   equippedDefensesPrefabs:
   - {fileID: 7114210511905106021, guid: 99cba0534160e354c9d2f19d1200f09b, type: 3}
   - {fileID: 7114210511905106021, guid: 117d43352e72bad4cb465373c31521cd, type: 3}
-  - {fileID: 0}
+  - {fileID: 7114210511905106021, guid: 9273b913c371bd0449755e42389e0f79, type: 3}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
