@@ -16,9 +16,9 @@ public class AreaDamageTrapDefense : TrapDefenseClass
         damageArea.SetActive(false);
     }
 
-    protected override void OnRepair()
+    protected override void OnWaveStart()
     {
-        base.OnRepair();
+        base.OnWaveStart();
         if (!defenseModels[currentLevel].activeSelf)
             defenseModels[currentLevel].SetActive(true);
     }

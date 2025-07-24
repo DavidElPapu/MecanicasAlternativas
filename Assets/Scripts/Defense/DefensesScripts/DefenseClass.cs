@@ -25,11 +25,10 @@ public abstract class DefenseClass : MonoBehaviour
     public List<GameObject> defenseModels = new List<GameObject>();
     public DefenseDetectionRangeScript detectionRange;
     public Material defenseMAT, previewMAT;
-    public event Action<GameObject> DefenseBroken;
     [Header("Stats")]
-    protected bool isBroken, isActive;
+    protected bool isActive;
     protected int currentLevel;
-    protected float currentHealth, currentCooldown, damageMultiplier;
+    protected float currentCooldown, damageMultiplier;
     protected GameObject currentTarget;
     protected List<GameObject> targetsInRange = new List<GameObject>();
 
@@ -57,7 +56,6 @@ public abstract class DefenseClass : MonoBehaviour
 
     protected virtual void OnBreakStart()
     {
-        OnRepair();
         if (isActive)
             isActive = false;
     }
@@ -68,9 +66,7 @@ public abstract class DefenseClass : MonoBehaviour
             Debug.LogError("No tiene defenseSO");
         if (detectionRange != null)
             detectionRange.InitializeDetection(this);
-        isBroken = false;
         isActive = true;
-        currentHealth = defenseLevels[currentLevel].maxHealth;
         currentCooldown = defenseLevels[currentLevel].mainCooldown;
         damageMultiplier = 1f;
         currentTarget = null;
@@ -88,20 +84,6 @@ public abstract class DefenseClass : MonoBehaviour
         Destroy(this.gameObject);
     }
 
-    protected virtual void OnBroken()
-    {
-        DefenseBroken?.Invoke(gameObject);
-        isBroken = true;
-    }
-
-    protected virtual void OnRepair()
-    {
-        if (isBroken)
-            isBroken = false;
-        currentHealth = defenseLevels[currentLevel].maxHealth;
-
-    }
-
     public virtual void OnUpgrading()
     {
         defenseModels[currentLevel].SetActive(false);
@@ -117,13 +99,6 @@ public abstract class DefenseClass : MonoBehaviour
         {
             modelPartsRenderers.material = previewMAT;
         }
-    }
-
-    public virtual void OnDamaged(float damage)
-    {
-        currentHealth -= damage;
-        if (currentHealth <= 0)
-            OnBroken();
     }
 
     public virtual void OnTargetEnteredDetectionRange(GameObject target)
@@ -157,9 +132,7 @@ public abstract class DefenseClass : MonoBehaviour
 
     public virtual bool CanBeAttackedByEnemy()
     {
-        if (!isActive || isBroken)
-            return false;
-        else if (enemyInteraction == EnemyInteractionType.IgnoreEnemyAndDefense || enemyInteraction == EnemyInteractionType.IgnoreDefenseTargetEnemy)
+        if (!isActive || enemyInteraction == EnemyInteractionType.IgnoreEnemyAndDefense || enemyInteraction == EnemyInteractionType.IgnoreDefenseTargetEnemy)
             return false;
         else
             return true;

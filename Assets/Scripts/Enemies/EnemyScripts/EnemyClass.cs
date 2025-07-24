@@ -87,7 +87,6 @@ public abstract class EnemyClass : MonoBehaviour
     public virtual void OnDeath()
     {
         EnemyDeath?.Invoke(gameObject);
-        Destroy(gameObject);
     }
 
     public virtual void TakeDamage(float damage, GameObject damageDealer)
@@ -218,7 +217,10 @@ public abstract class EnemyClass : MonoBehaviour
                     }
                     else if (hit.collider.gameObject.CompareTag("Defense"))
                     {
-                        hit.collider.gameObject.GetComponent<DefenseClass>().OnDamaged(enemySO.damage * damageMultiplier * damageDebuff);
+                        if (hit.collider.gameObject.TryGetComponent(out BreakableDefenseClass breakableDefenseScript))
+                        {
+                            breakableDefenseScript.OnDamaged(enemySO.damage * damageMultiplier * damageDebuff);
+                        }
                     }
                 }
             }
@@ -274,14 +276,19 @@ public abstract class EnemyClass : MonoBehaviour
         {
             if (target.GetComponent<DefenseClass>().CanBeAttackedByEnemy())
             {
-                targetsInRange.Add(target);
-                target.GetComponent<DefenseClass>().DefenseBroken += OnDefenseBroke;
-                if (!isOnFightMode)
+                if (target.TryGetComponent(out BreakableDefenseClass targetDefenseScript))
                 {
-                    isOnFightMode = true;
-                    currentTarget = target;
-                    attackCooldownCount = enemySO.attackCooldown;
+                    targetsInRange.Add(target);
+                    targetDefenseScript.DefenseBroken += OnDefenseBroke;
+                    if (!isOnFightMode)
+                    {
+                        isOnFightMode = true;
+                        currentTarget = target;
+                        attackCooldownCount = enemySO.attackCooldown;
+                    }
                 }
+                else
+                    Debug.LogError("Se intenta atacar una defensa que no hereda de breakable defense, osea que no puede ser atacada");
             }
         }
     }
@@ -294,7 +301,7 @@ public abstract class EnemyClass : MonoBehaviour
             if (isPlayer)
                 PlayerStatus.PlayerDeath -= OnPlayerDeath;
             else
-                goneTarget.GetComponent<DefenseClass>().DefenseBroken -= OnDefenseBroke;
+                goneTarget.GetComponent<BreakableDefenseClass>().DefenseBroken -= OnDefenseBroke;
             if (currentTarget == goneTarget)
             {
                 if (targetsInRange.Count > 0)

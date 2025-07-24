@@ -88,6 +88,7 @@ public class EnemySpawnManager : MonoBehaviour
         if (enemiesAlive.Contains(enemy))
         {
             enemiesAlive.Remove(enemy);
+            Destroy(enemy);
             playerUI.ChangeEnemiesAliveText(enemiesAlive.Count);
             if (enemiesAlive.Count <= 0)
                 WaveCleared?.Invoke();

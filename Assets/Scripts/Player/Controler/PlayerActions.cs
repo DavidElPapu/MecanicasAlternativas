@@ -67,11 +67,6 @@ public class PlayerActions : MonoBehaviour
             return;
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            if (!isBuilding)
-                gunScripts[currentSelectionIndex].OnAttackStart();
-        }
-        if (Input.GetKeyUp(KeyCode.Mouse0))
-        {
             if (isBuilding)
             {
                 if (buildCount <= 0)
@@ -81,9 +76,14 @@ public class PlayerActions : MonoBehaviour
                 }
             }
             else
+                gunScripts[currentSelectionIndex].OnAttackStart();
+        }
+        if (Input.GetKeyUp(KeyCode.Mouse0))
+        {
+            if (!isBuilding)
                 gunScripts[currentSelectionIndex].OnAttackEnd();
         }
-        if (Input.GetKeyUp(KeyCode.Mouse1))
+        if (Input.GetKeyDown(KeyCode.Mouse1))
         {
             if (isBuilding)
             {

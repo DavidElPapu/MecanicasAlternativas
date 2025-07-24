@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BaseDefenseScript : DefenseClass
+public class BaseDefenseScript : BreakableDefenseClass
 {
     public LevelManager levelManager;
     public float maxBaseHealth;
@@ -42,7 +42,7 @@ public class BaseDefenseScript : DefenseClass
         //Ni romper
     }
 
-    protected override void OnRepair()
+    protected override void OnRepair(bool activateOnRepair)
     {
         //Ni reparar
 
@@ -68,6 +68,6 @@ public class BaseDefenseScript : DefenseClass
 
     public override bool CanBeAttackedByEnemy()
     {
-            return true;
+        return true;
     }
 }

@@ -11,8 +11,10 @@ public class TrapDefenseClass : DefenseClass
         readyToActivate = true;
     }
 
-    protected override void OnRepair()
+
+    protected override void OnWaveStart()
     {
+        base.OnWaveStart();
         readyToActivate = true;
     }
 
