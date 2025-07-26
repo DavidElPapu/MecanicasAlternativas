@@ -1,32 +1,27 @@
 using UnityEngine;
 using System.Collections;
 
-public class HitscanGunClass : GunClass
+public class HitscanTurretDefenseClass : TurretDefenseClass
 {
-    public Transform gunCannon;
     public GameObject shootingEffect, hitEffect;
+    public LayerMask collisionLayer;
     public float effectTime;
 
     protected override void Awake()
     {
-        isAttacking = false;
-        isActive = false;
-        currentLevel = 1;
-        currentAttackCooldown = 0f;
-        damageMultiplier = 1f;
-        shootingEffect.transform.position = gunCannon.transform.position;
-        shootingEffect.transform.LookAt(Camera.main.transform.position);
+        base.Awake();
         if (shootingEffect.activeSelf)
             shootingEffect.SetActive(false);
         if (hitEffect.activeSelf)
             hitEffect.SetActive(false);
     }
 
-    public override void Attack()
+    protected override void Shoot()
     {
+        shootingEffect.transform.LookAt(Camera.main.transform.position);
         StartCoroutine(ShowEffect(shootingEffect));
-        Ray ray = new Ray(gunCannon.transform.position, gunCannon.transform.forward);
-        if (Physics.Raycast(ray, out RaycastHit hit, gunSO.range, gunSO.collisionLayer, QueryTriggerInteraction.Ignore))
+        Ray ray = new Ray(turretCannons[currentLevel].position, turretCannons[currentLevel].forward);
+        if (Physics.Raycast(ray, out RaycastHit hit, defenseLevels[currentLevel].range + recoilDistance + 1f, collisionLayer, QueryTriggerInteraction.Ignore))
         {
             if (hit.collider.gameObject != null)
             {
@@ -34,7 +29,7 @@ public class HitscanGunClass : GunClass
                 hitEffect.transform.LookAt(Camera.main.transform.position);
                 StartCoroutine(ShowEffect(hitEffect));
                 if (hit.collider.gameObject.CompareTag("Enemy"))
-                    hit.collider.gameObject.GetComponent<EnemyClass>().TakeDamage(gunSO.damage, null);
+                    hit.collider.gameObject.GetComponent<EnemyClass>().TakeDamage(defenseLevels[currentLevel].damage * damageMultiplier, gameObject);
             }
         }
     }

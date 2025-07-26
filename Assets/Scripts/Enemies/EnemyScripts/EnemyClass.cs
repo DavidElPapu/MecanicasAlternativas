@@ -13,7 +13,7 @@ public abstract class EnemyClass : MonoBehaviour
     protected EnemySpawnManager enemyManager;
     protected Rigidbody rb; 
     [Header("Stats")]
-    [SerializeField] protected float currentHealth;
+    protected float currentHealth;
     protected bool isStunned;
     protected float damageMultiplier;
     protected float speedMultiplier;
@@ -328,6 +328,16 @@ public abstract class EnemyClass : MonoBehaviour
     public virtual (int wayPoint, float distance) GetDistanceToBase()
     {
         return (currentWayPoint, distanceToWayPoint);
+    }
+
+    public virtual float GetStrenght()
+    {
+        return (enemySO.damage * damageMultiplier * damageDebuff);
+    }
+
+    public virtual float GetHealth()
+    {
+        return currentHealth;
     }
 
     protected virtual void MoveCanvasToCamera()

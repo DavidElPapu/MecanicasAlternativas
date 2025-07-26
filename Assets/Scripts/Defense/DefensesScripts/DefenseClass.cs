@@ -32,7 +32,7 @@ public abstract class DefenseClass : MonoBehaviour
     protected GameObject currentTarget;
     protected List<GameObject> targetsInRange = new List<GameObject>();
 
-    public virtual void Awake()
+    protected virtual void Awake()
     {
         currentLevel = 0;
         isActive = false;
@@ -80,8 +80,9 @@ public abstract class DefenseClass : MonoBehaviour
 
     public virtual void OnDeleting()
     {
-        //En teoria aqui no hace falta llamar el evento de defense broken ya que no deberia haber enemigos cuando se quitan defensas
-        Destroy(this.gameObject);
+        LevelManager.OnWaveStart -= OnWaveStart;
+        LevelManager.OnBreakStart -= OnBreakStart;
+        Destroy(gameObject);
     }
 
     public virtual void OnUpgrading()

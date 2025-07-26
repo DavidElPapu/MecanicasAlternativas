@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 using System;
 
@@ -88,10 +89,17 @@ public class EnemySpawnManager : MonoBehaviour
         if (enemiesAlive.Contains(enemy))
         {
             enemiesAlive.Remove(enemy);
-            Destroy(enemy);
+            StartCoroutine(DestroyEnemyAfterDelay(enemy, 0.5f));
             playerUI.ChangeEnemiesAliveText(enemiesAlive.Count);
             if (enemiesAlive.Count <= 0)
                 WaveCleared?.Invoke();
         }
+    }
+
+    private IEnumerator DestroyEnemyAfterDelay(GameObject enemy, float delay)
+    {
+        enemy.SetActive(false);
+        yield return new WaitForSeconds(delay);
+        Destroy(enemy);
     }
 }

@@ -6,9 +6,13 @@ public class DefensesSO : ScriptableObject
 {
     public int price;
     public float damage;
+    //Para toda defensa que necesite de un rango (ya sea para hacer raycast o expandir area de detección)
     public float range;
     public float maxHealth;
+    //Cooldown que puede servir para cadencia de disparo, cooldown de trampa, de ataque, de uso, etc..
     public float mainCooldown;
+    //Sirve para cualquier tipo de usos que tenga la defensa, como municion, o usos  especificos (0 significa que no lo necesita o usa)
+    public int maxUses;
     public enum DebuffType
     {
         Stun,

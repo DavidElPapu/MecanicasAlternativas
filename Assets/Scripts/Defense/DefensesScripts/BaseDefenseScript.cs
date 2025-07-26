@@ -6,10 +6,15 @@ public class BaseDefenseScript : BreakableDefenseClass
     public float maxBaseHealth;
     //protected float healingPerWave;
 
-    public override void Awake()
+    protected override void Awake()
     {
         isActive = true;
         currentHealth = maxBaseHealth;
+    }
+
+    protected override void Update()
+    {
+        //Nada
     }
 
     protected override void DoMainAction()
@@ -69,5 +74,10 @@ public class BaseDefenseScript : BreakableDefenseClass
     public override bool CanBeAttackedByEnemy()
     {
         return true;
+    }
+
+    protected override void MoveCanvasToCamera()
+    {
+        //No tiene canvas
     }
 }

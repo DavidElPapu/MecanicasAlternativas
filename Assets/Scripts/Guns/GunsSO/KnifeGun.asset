@@ -17,7 +17,7 @@ MonoBehaviour:
   icon: {fileID: 0}
   collisionLayer:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 257
   damage: 10
-  attackCooldown: 0.5
+  attackCooldown: 0.1
   range: 1.5

@@ -243,6 +243,12 @@ public class PlayerActions : MonoBehaviour
                     previewInfoImage.sprite = previewInfoImages[4];
                 }
             }
+            else
+            {
+                previewInfoText1.text = "Locacion Ocupada";
+                previewInfoText1.color = Color.yellow;
+                previewInfoImage.sprite = previewInfoImages[2];
+            }
             defenseOnRightClickAction = DefenseAction.Delete;
             previewInfoText2.text = "Click Derecho: Borrar Defensa";
             previewInfoText2.color = Color.black;

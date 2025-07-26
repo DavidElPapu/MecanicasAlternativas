@@ -307,6 +307,11 @@ MonoBehaviour:
   detectionRange: {fileID: 0}
   defenseMAT: {fileID: 0}
   previewMAT: {fileID: 0}
+  brokenDefenseModel: {fileID: 0}
+  modelHibox: {fileID: 0}
+  statsCanvas: {fileID: 0}
+  healthSlider: {fileID: 0}
+  healthText: {fileID: 0}
   levelManager: {fileID: 1524749326}
   maxBaseHealth: 100
 --- !u!65 &71223325
@@ -3874,18 +3879,8 @@ MonoBehaviour:
   mapGrid: {fileID: 221009768}
   enemySpawnManager: {fileID: 1524749324}
   enemySpawnPoints:
-  - {fileID: 1186438759}
-  - {fileID: 1633162991}
-  - {fileID: 780559670}
-  - {fileID: 1074846848}
-  - {fileID: 2120950912}
   - {fileID: 1059985405}
   mapWayPointParents:
-  - {fileID: 1726010264}
-  - {fileID: 1059890214}
-  - {fileID: 2027923892}
-  - {fileID: 2006780744}
-  - {fileID: 1434341857}
   - {fileID: 798527831}
   enemySpawnRate: 0.5
   playerStatus: {fileID: 1639009010}
@@ -4197,7 +4192,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24b497cd34fa873409cde3a3a780d75e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defenseSlots: 3
+  defenseSlots: 5
   gunSlots: 3
   maxBuildingRange: 6
   buildCooldown: 0.5
@@ -4213,8 +4208,8 @@ MonoBehaviour:
   - {fileID: 7114210511905106021, guid: 99cba0534160e354c9d2f19d1200f09b, type: 3}
   - {fileID: 7114210511905106021, guid: 117d43352e72bad4cb465373c31521cd, type: 3}
   - {fileID: 7114210511905106021, guid: 9273b913c371bd0449755e42389e0f79, type: 3}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 6970351787703872529, guid: 86208198fe994d74bb49038dc85fdce9, type: 3}
+  - {fileID: 6970351787703872529, guid: 95fd57fd81f110d42977df92e63ded26, type: 3}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
