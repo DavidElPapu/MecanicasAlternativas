@@ -5,7 +5,7 @@ using TMPro;
 
 public class PlayerActions : MonoBehaviour
 {
-    public int defenseSlots, gunSlots;
+    public int defenseSlots, gunSlots, maxDefenseSlots, maxGunSlots;
     public float maxBuildingRange, buildCooldown;
     public Transform previewSpot;
     public Transform gunHolder;
@@ -24,6 +24,7 @@ public class PlayerActions : MonoBehaviour
     private GunClass[] gunScripts = new GunClass[3];
     private GridData mapGridData;
     [Header("UI")]
+    public PlayerMainUI playerUI;
     public GameObject previewInfoCanvas;
     public Sprite[] previewInfoImages = new Sprite[6];
     public Image previewInfoImage;
@@ -39,7 +40,17 @@ public class PlayerActions : MonoBehaviour
     }
     private DefenseAction defenseOnLeftClickAction, defenseOnRightClickAction;
 
-    void Start()
+    private void Awake()
+    {
+        isAlive = false;
+        //el plan es que primero un  script externo le de los datos de equipped gun y defense prefabs junto con sus gun y defense slots a este script
+        //para que luego este script se los pase a la UI cuando empieze el juego, por ahora lo hara en el awake
+        OnGameStart();
+        UpdateHotbarUI();
+        UpdateSelectedIconUI();
+    }
+
+    public void OnGameStart()
     {
         isBuilding = true;
         isAlive = true;
@@ -61,10 +72,9 @@ public class PlayerActions : MonoBehaviour
         ToggleDefensePreviews(true);
     }
 
-    void Update()
+    private void Update()
     {
-        if (!isAlive)
-            return;
+        if (!isAlive) return;
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             if (isBuilding)
@@ -94,10 +104,11 @@ public class PlayerActions : MonoBehaviour
                 }
             }
         }
+        GetNumbersInput();
         
         float mouseScroll = Input.GetAxis("Mouse ScrollWheel");
         if (mouseScroll != 0f)
-            SwitchSelection(mouseScroll);
+            SwitchSelection(mouseScroll, -1);
 
         if (isBuilding)
         {
@@ -108,6 +119,46 @@ public class PlayerActions : MonoBehaviour
             {
                 buildCount -= Time.deltaTime;
             }
+        }
+    }
+
+    private void GetNumbersInput()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1) && 0 < currentSelectionLimit)
+        {
+            SwitchSelection(0, 0);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2) && 1 < currentSelectionLimit)
+        {
+            SwitchSelection(0, 1);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3) && 2 < currentSelectionLimit)
+        {
+            SwitchSelection(0, 2);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4) && 3 < currentSelectionLimit)
+        {
+            SwitchSelection(0, 3);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha5) && 4 < currentSelectionLimit)
+        {
+            SwitchSelection(0, 4);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha6) && 5 < currentSelectionLimit)
+        {
+            SwitchSelection(0, 5);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha7) && 6 < currentSelectionLimit)
+        {
+            SwitchSelection(0, 6);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha8) && 7 < currentSelectionLimit)
+        {
+            SwitchSelection(0, 7);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha9) && 8 < currentSelectionLimit)
+        {
+            SwitchSelection(0, 8);
         }
     }
 
@@ -408,25 +459,66 @@ public class PlayerActions : MonoBehaviour
             previewInfoCanvas.SetActive(true);
             isBuilding = true;
         }
+        UpdateHotbarUI();
+        UpdateSelectedIconUI();
     }
 
-    private void SwitchSelection(float mouseScroll)
+    private void SwitchSelection(float mouseScroll, int specificSelection)
     {
         lastSelectionIndex = currentSelectionIndex;
-        //Cambia seleccion en base al mouse
-        if (mouseScroll > 0f)
-            currentSelectionIndex++;
-        else if (mouseScroll < 0f)
-            currentSelectionIndex--;
-        //Se asegura de que de la vuelta la seleccion
-        if (currentSelectionIndex >= currentSelectionLimit)
-            currentSelectionIndex = 0;
-        else if (currentSelectionIndex < 0)
-            currentSelectionIndex = currentSelectionLimit - 1;
+        if (specificSelection == -1)
+        {
+            //Cambia seleccion en base al mouse
+            if (mouseScroll > 0f)
+                currentSelectionIndex--;
+            else if (mouseScroll < 0f)
+                currentSelectionIndex++;
+            //Se asegura de que de la vuelta la seleccion
+            if (currentSelectionIndex >= currentSelectionLimit)
+                currentSelectionIndex = 0;
+            else if (currentSelectionIndex < 0)
+                currentSelectionIndex = currentSelectionLimit - 1;
+        }
+        else
+        {
+            currentSelectionIndex = specificSelection;
+        }
         //Si construlle, llama el cambio de defensa
         if (isBuilding)
             SwitchDefensePreview();
         else
             SwitchGun();
+        UpdateSelectedIconUI();
+    }
+
+    private void UpdateHotbarUI()
+    {
+        Sprite[] newHotbarIcons = new Sprite[playerUI.hotbarItemsIcons.Length];
+        for (int i = 0; i < newHotbarIcons.Length; i++)
+        {
+            if (i < defenseSlots && isBuilding)
+                newHotbarIcons[i] = equippedDefensesPrefabs[i].GetComponent<DefenseClass>().icon;
+            else if (i < gunSlots && !isBuilding)
+                newHotbarIcons[i] = equippedGunsPrefabs[i].GetComponent<GunClass>().gunSO.icon;
+            else if ((i < maxDefenseSlots && isBuilding) || (i < maxGunSlots && !isBuilding))
+                newHotbarIcons[i] = playerUI.lockedItemSprite;
+            else
+                newHotbarIcons[i] = null;
+        }
+        playerUI.SetHotbarIcons(newHotbarIcons);
+    }
+
+    private void UpdateSelectedIconUI()
+    {
+        if (isBuilding)
+        {
+            DefenseClass selectedDCS = equippedDefensesPrefabs[currentSelectionIndex].GetComponent<DefenseClass>();
+            playerUI.ChangeSelectedItemUI(selectedDCS.icon, selectedDCS.defenseName, "$" + selectedDCS.defenseLevels[selectedDCS.GetCurrentLevel()].price.ToString());
+        }
+        else
+        {
+            GunClass selectedGCS = equippedGunsPrefabs[currentSelectionIndex].GetComponent<GunClass>();
+            playerUI.ChangeSelectedItemUI(selectedGCS.gunSO.icon, selectedGCS.gunSO.gunName, "por ahora nada, pero aqui podria ir la municion");
+        }
     }
 }

@@ -2045,7 +2045,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defenseName: Barrera
   description: 
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 8e6e2761167839249acdcc1309a74e56, type: 3}
   size: {x: 1, y: 1, z: 1}
   maxPlacements: 10
   validCells: 02000000

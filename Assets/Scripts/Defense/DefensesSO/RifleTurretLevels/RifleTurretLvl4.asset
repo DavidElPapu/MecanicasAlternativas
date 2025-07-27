@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 303ecf3f333177643b8ede74ebc4313e, type: 3}
   m_Name: RifleTurretLvl4
   m_EditorClassIdentifier: 
-  price: 0
-  damage: 0
-  range: 0
-  maxHealth: 0
-  mainCooldown: 0
-  maxUses: 0
+  price: 340
+  damage: 8
+  range: 10
+  maxHealth: 20
+  mainCooldown: 0.15
+  maxUses: 150
   appliedDebuffs: 
   debuffsIntensities: []
   debuffsTimes: []

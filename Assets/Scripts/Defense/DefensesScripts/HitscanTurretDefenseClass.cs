@@ -18,6 +18,7 @@ public class HitscanTurretDefenseClass : TurretDefenseClass
 
     protected override void Shoot()
     {
+        shootingEffect.transform.position = turretCannons[currentLevel].position;
         shootingEffect.transform.LookAt(Camera.main.transform.position);
         StartCoroutine(ShowEffect(shootingEffect));
         Ray ray = new Ray(turretCannons[currentLevel].position, turretCannons[currentLevel].forward);

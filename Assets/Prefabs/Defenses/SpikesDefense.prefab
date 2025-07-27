@@ -1603,7 +1603,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defenseName: Pinchos
   description: 
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 1c6904437d845bf4abf8d56f802adfd4, type: 3}
   size: {x: 1, y: 1, z: 1}
   maxPlacements: 1000
   validCells: 02000000

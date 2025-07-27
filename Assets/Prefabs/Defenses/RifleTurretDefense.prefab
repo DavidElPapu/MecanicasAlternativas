@@ -3949,7 +3949,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defenseName: Torreta Rifle
   description: 
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 841f26281dc3c92419e502c5aae88d36, type: 3}
   size: {x: 1, y: 1, z: 1}
   maxPlacements: 5
   validCells: 02000000

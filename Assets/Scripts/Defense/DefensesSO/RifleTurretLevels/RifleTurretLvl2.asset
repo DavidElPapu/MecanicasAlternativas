@@ -17,7 +17,7 @@ MonoBehaviour:
   range: 7
   maxHealth: 10
   mainCooldown: 0.2
-  maxUses: 420
+  maxUses: 60
   appliedDebuffs: 
   debuffsIntensities: []
   debuffsTimes: []
