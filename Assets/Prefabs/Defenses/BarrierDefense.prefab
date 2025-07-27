@@ -2043,10 +2043,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79d588419da5f8d4394163536309ea9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defenseName: Barrier
+  defenseName: Barrera
   description: 
   icon: {fileID: 0}
   size: {x: 1, y: 1, z: 1}
+  maxPlacements: 10
   validCells: 02000000
   enemyInteraction: 1
   defenseLevels:

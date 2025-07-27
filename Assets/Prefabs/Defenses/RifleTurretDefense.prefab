@@ -3947,10 +3947,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dde0817a0db809447bf4d558d9d0bfa6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defenseName: Rifle Turret
+  defenseName: Torreta Rifle
   description: 
   icon: {fileID: 0}
   size: {x: 1, y: 1, z: 1}
+  maxPlacements: 5
   validCells: 02000000
   enemyInteraction: 3
   defenseLevels:

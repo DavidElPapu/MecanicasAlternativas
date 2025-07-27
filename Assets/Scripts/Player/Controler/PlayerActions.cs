@@ -158,6 +158,7 @@ public class PlayerActions : MonoBehaviour
             GameObject newDefense = Instantiate(equippedDefensesPrefabs[currentSelectionIndex], mapGrid.CellToWorld(currentPreviewGridPos), defaultRotation);
             DefenseClass newDefenseScript = newDefense.GetComponent<DefenseClass>();
             mapGridData.AddObjectAt(currentPreviewGridPos, newDefenseScript.size, ObjectData.CellState.Defese, newDefense);
+            mapGridDataManager.DefenseBuilded(newDefense, currentPreviewGridPos);
             economySystem.ChangeCurrentMoney(-newDefenseScript.defenseLevels[newDefenseScript.GetCurrentLevel()].price);
             newDefenseScript.OnPlacing();
         }
@@ -190,6 +191,7 @@ public class PlayerActions : MonoBehaviour
                 returnCash += otherDefenseScript.defenseLevels[i].price;
             }
             mapGridData.RemoveObjectAt(currentPreviewGridPos, otherDefenseScript.size);
+            mapGridDataManager.DefenseRemoved(otherDefenseScript.gameObject);
             economySystem.ChangeCurrentMoney(returnCash);
             otherDefenseScript.OnDeleting();
         }
@@ -255,32 +257,43 @@ public class PlayerActions : MonoBehaviour
         }
         else
         {
-            if (myDefenseScript.validCells.Contains(cellState))
+            if(mapGridDataManager.GetNumberOfDefense(myDefenseScript.defenseName) < myDefenseScript.maxPlacements)
             {
-                if (economySystem.GetCurrentMoney() >= myDefenseScript.defenseLevels[myDefenseScript.GetCurrentLevel()].price)
+                if (myDefenseScript.validCells.Contains(cellState))
                 {
-                    myDefenseScript.ChangeModelMaterials(Color.green);
-                    defenseOnLeftClickAction = DefenseAction.Build;
-                    previewInfoText1.text = "Click Izquierdo: Construir Defensa ($" + myDefenseScript.defenseLevels[myDefenseScript.GetCurrentLevel()].price.ToString() + ")";
-                    previewInfoText1.color = Color.green;
-                    previewInfoImage.sprite = previewInfoImages[1];
+                    if (economySystem.GetCurrentMoney() >= myDefenseScript.defenseLevels[myDefenseScript.GetCurrentLevel()].price)
+                    {
+                        myDefenseScript.ChangeModelMaterials(Color.green);
+                        defenseOnLeftClickAction = DefenseAction.Build;
+                        previewInfoText1.text = "Click Izquierdo: Construir Defensa ($" + myDefenseScript.defenseLevels[myDefenseScript.GetCurrentLevel()].price.ToString() + ")";
+                        previewInfoText1.color = Color.green;
+                        previewInfoImage.sprite = previewInfoImages[1];
+                    }
+                    else
+                    {
+                        myDefenseScript.ChangeModelMaterials(Color.yellow);
+                        previewInfoText1.text = "Dinero Insuficiente para construir ($" + myDefenseScript.defenseLevels[myDefenseScript.GetCurrentLevel()].price.ToString() + ")";
+                        previewInfoText1.color = Color.yellow;
+                        previewInfoImage.sprite = previewInfoImages[5];
+                    }
+                    defenseOnRightClickAction = DefenseAction.Rotate;
+                    previewInfoText2.text = "Click Derecho: Rotar Defensa";
+                    previewInfoText2.color = Color.black;
                 }
                 else
                 {
                     myDefenseScript.ChangeModelMaterials(Color.yellow);
-                    previewInfoText1.text = "Dinero Insuficiente para construir ($" + myDefenseScript.defenseLevels[myDefenseScript.GetCurrentLevel()].price.ToString() + ")";
-                    previewInfoText1.color = Color.yellow;
-                    previewInfoImage.sprite = previewInfoImages[5];
+                    previewInfoText1.text = "";
+                    previewInfoText2.text = "Locacion Invalida";
+                    previewInfoText2.color = Color.yellow;
+                    previewInfoImage.sprite = previewInfoImages[2];
                 }
-                defenseOnRightClickAction = DefenseAction.Rotate;
-                previewInfoText2.text = "Click Derecho: Rotar Defensa";
-                previewInfoText2.color = Color.black;
             }
             else
             {
                 myDefenseScript.ChangeModelMaterials(Color.yellow);
                 previewInfoText1.text = "";
-                previewInfoText2.text = "Locacion Invalida";
+                previewInfoText2.text = "Limite de " + myDefenseScript.defenseName + " alcazado";
                 previewInfoText2.color = Color.yellow;
                 previewInfoImage.sprite = previewInfoImages[2];
             }

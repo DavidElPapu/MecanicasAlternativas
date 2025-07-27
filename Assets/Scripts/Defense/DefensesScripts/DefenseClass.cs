@@ -11,6 +11,7 @@ public abstract class DefenseClass : MonoBehaviour
     public Sprite icon;
     public Vector3Int size = new Vector3Int(1, 1, 1);
     [Header("Defense Data")]
+    public int maxPlacements;
     public List<ObjectData.CellState> validCells = new List<ObjectData.CellState>();
     public enum EnemyInteractionType
     {
