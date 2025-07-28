@@ -200,7 +200,7 @@ public abstract class TurretDefenseClass : BreakableDefenseClass
             ammoText.text = currentAmmo.ToString();
         }
         if (defenseLevels[currentLevel].range > 0)
-            detectionRange.gameObject.GetComponent<SphereCollider>().radius = defenseLevels[currentLevel].range;
+            detectionRange.gameObject.transform.localScale = new Vector3(defenseLevels[currentLevel].range * 2, defenseLevels[currentLevel].range * 2, defenseLevels[currentLevel].range * 2);
     }
 
     protected virtual IEnumerator RecoilTurretHead()
