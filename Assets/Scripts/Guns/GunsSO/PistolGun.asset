@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d3366cf5b6b0e64ab95ecfca21e01b5, type: 3}
   m_Name: PistolGun
   m_EditorClassIdentifier: 
-  gunName: Pistol
-  description: 
-  icon: {fileID: 0}
+  gunName: Pistola
+  description: Dispara a los enemigos con esta arma de balas fuertes
+  icon: {fileID: 21300000, guid: 03e4c6db45e77204fb9cebab9e692699, type: 3}
   collisionLayer:
     serializedVersion: 2
     m_Bits: 257

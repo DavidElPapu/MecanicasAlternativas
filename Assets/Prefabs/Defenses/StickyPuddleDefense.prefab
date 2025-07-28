@@ -1255,7 +1255,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defenseName: Charco Pegajoso
-  description: 
+  description: Charco de una substancia desconocida que ralentiza a los enemigos
+    que entren en contacto
   icon: {fileID: 21300000, guid: c03b42e32ae846a4485e36c5dde41d0f, type: 3}
   size: {x: 1, y: 1, z: 1}
   maxPlacements: 1000

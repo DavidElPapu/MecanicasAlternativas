@@ -1602,7 +1602,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defenseName: Pinchos
-  description: 
+  description: "Trampa puntiaguda que inflije da\xF1o a los enemigos que pasen por
+    encima"
   icon: {fileID: 21300000, guid: 1c6904437d845bf4abf8d56f802adfd4, type: 3}
   size: {x: 1, y: 1, z: 1}
   maxPlacements: 1000

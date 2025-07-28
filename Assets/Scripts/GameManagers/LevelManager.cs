@@ -23,6 +23,8 @@ public class LevelManager : MonoBehaviour
     public float enemySpawnRate;
     private int enemyIndex;
     [Header("PlayerManagement")]
+    public PlayerActions playerActions;
+    public PlayerMovement playerMovement;
     public PlayerStatus playerStatus;
     public EconomySystem playerEconomy;
     public float playerReviveTime;
@@ -52,6 +54,12 @@ public class LevelManager : MonoBehaviour
         {
             OnWaveContinue();
         }
+    }
+
+    public void OnGameStart(List<GameObject> selectedDefenses, List<GameObject> selectedGuns)
+    {
+        playerActions.OnGameStart(selectedDefenses, selectedGuns);
+        playerMovement.OnGameStart();
     }
 
     public void OnWaveContinue()

@@ -13,8 +13,8 @@ public class PlayerActions : MonoBehaviour
     public Grid mapGrid;
     public EconomySystem economySystem;
     public MapGridDataManager mapGridDataManager;
-    public GameObject[] equippedDefensesPrefabs = new GameObject[10];
-    public GameObject[] equippedGunsPrefabs = new GameObject[3];
+    private List<GameObject> equippedDefensesPrefabs = new List<GameObject>();
+    private List<GameObject> equippedGunsPrefabs = new List<GameObject>();
     private bool isBuilding, isAlive;
     private int currentSelectionIndex, lastSelectionIndex, lastGunIndex, lastDefenseIndex, currentSelectionLimit;
     private float buildCount;
@@ -45,13 +45,12 @@ public class PlayerActions : MonoBehaviour
         isAlive = false;
         //el plan es que primero un  script externo le de los datos de equipped gun y defense prefabs junto con sus gun y defense slots a este script
         //para que luego este script se los pase a la UI cuando empieze el juego, por ahora lo hara en el awake
-        OnGameStart();
-        UpdateHotbarUI();
-        UpdateSelectedIconUI();
     }
 
-    public void OnGameStart()
+    public void OnGameStart(List<GameObject> selectedDefenses, List<GameObject> selectedGuns)
     {
+        equippedDefensesPrefabs = selectedDefenses;
+        equippedGunsPrefabs = selectedGuns;
         isBuilding = true;
         isAlive = true;
         currentSelectionIndex = 0;
@@ -70,6 +69,8 @@ public class PlayerActions : MonoBehaviour
         LevelManager.OnWaveStart += OnWaveStart;
         //esto nomas lo pongo porque inicia contrullendo, pero quiza no hara falta despues que este en start
         ToggleDefensePreviews(true);
+        UpdateHotbarUI();
+        UpdateSelectedIconUI();
     }
 
     private void Update()

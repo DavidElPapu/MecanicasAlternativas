@@ -2,6 +2,12 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    [Header("Camera")]
+    public Transform playerCamera;
+    public float sensX;
+    public float sensY;
+    private float xRotation;
+    private float yRotation;
     [Header("Movement")]
     public float walkSpeed;
     public float runSpeed;
@@ -26,8 +32,15 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody rb;
     private bool isAlive;
 
-    private void Start()
+    private void Awake()
     {
+        isAlive = false;
+    }
+
+    public void OnGameStart()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         moveSpeed = walkSpeed;
         gravityScale = normalGravity;
         rb = GetComponent<Rigidbody>();
@@ -43,6 +56,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (isAlive)
         {
+            UpdateCamera();
             PlayerInput();
             GroundCheck();
             RotatePlayerBody();
@@ -120,5 +134,18 @@ public class PlayerMovement : MonoBehaviour
             Vector3 limitedVel = flatVel.normalized * moveSpeed;
             rb.linearVelocity = new Vector3(limitedVel.x, rb.linearVelocity.y, limitedVel.z);
         }
+    }
+
+    private void UpdateCamera()
+    {
+        float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sensX;
+        float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * sensY;
+
+        yRotation += mouseX;
+
+        xRotation -= mouseY;
+        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+
+        playerCamera.rotation = Quaternion.Euler(xRotation, yRotation, 0);
     }
 }

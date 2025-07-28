@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d3366cf5b6b0e64ab95ecfca21e01b5, type: 3}
   m_Name: RifleGun
   m_EditorClassIdentifier: 
-  gunName: Rifle
-  description: 
-  icon: {fileID: 0}
+  gunName: Rifle Explosivo
+  description: "Balacea Enemigos con este rifle que ademas tiene balas explosivas
+    que inflijen da\xF1o en area"
+  icon: {fileID: 21300000, guid: de5d47c83f6560b449d3d5e564d8526e, type: 3}
   collisionLayer:
     serializedVersion: 2
     m_Bits: 257
