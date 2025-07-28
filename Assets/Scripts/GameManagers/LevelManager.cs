@@ -58,6 +58,7 @@ public class LevelManager : MonoBehaviour
 
     public void OnGameStart(List<GameObject> selectedDefenses, List<GameObject> selectedGuns)
     {
+        playerEconomy.ChangeCurrentMoney(levelData.cashWaveReward[currentWave]);
         playerUI.OnGameStart();
         playerActions.OnGameStart(selectedDefenses, selectedGuns);
         playerMovement.OnGameStart();

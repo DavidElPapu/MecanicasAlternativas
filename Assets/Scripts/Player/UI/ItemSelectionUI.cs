@@ -51,30 +51,30 @@ public class ItemSelectionUI : MonoBehaviour
         for (int i = 0; i < maxAvailableItemSlots; i++)
         {
             if ((firstAvailableItemIndex + i >= defensePrefabs.Count && showDefense) || (firstAvailableItemIndex + i >= gunPrefabs.Count && !showDefense))
-                availableItemsSlots[firstAvailableItemIndex + i].SetActive(false);
+                availableItemsSlots[i].SetActive(false);
             else
             {
-                if (!availableItemsSlots[firstAvailableItemIndex + i].activeSelf)
-                    availableItemsSlots[firstAvailableItemIndex + i].SetActive(true);
+                if (!availableItemsSlots[i].activeSelf)
+                    availableItemsSlots[i].SetActive(true);
                 if (defenseIsAvailable[firstAvailableItemIndex + i] && showDefense)
                 {
                     DefenseClass defenseData = defensePrefabs[firstAvailableItemIndex + i].GetComponent<DefenseClass>();
-                    availableItemsNames[firstAvailableItemIndex + i].text = defenseData.defenseName;
-                    availableItemsIcons[firstAvailableItemIndex + i].sprite = defenseData.icon;
-                    availableItemsDescriptions[firstAvailableItemIndex + i].text = defenseData.description;
+                    availableItemsNames[i].text = defenseData.defenseName;
+                    availableItemsIcons[i].sprite = defenseData.icon;
+                    availableItemsDescriptions[i].text = defenseData.description;
                 }
                 else if (gunIsAvailable[firstAvailableItemIndex + i] && !showDefense)
                 {
                     GunSO gunData = gunPrefabs[firstAvailableItemIndex + i].GetComponent<GunClass>().gunSO;
-                    availableItemsNames[firstAvailableItemIndex + i].text = gunData.gunName;
-                    availableItemsIcons[firstAvailableItemIndex + i].sprite = gunData.icon;
-                    availableItemsDescriptions[firstAvailableItemIndex + i].text = gunData.description;
+                    availableItemsNames[i].text = gunData.gunName;
+                    availableItemsIcons[i].sprite = gunData.icon;
+                    availableItemsDescriptions[i].text = gunData.description;
                 }
                 else
                 {
-                    availableItemsNames[firstAvailableItemIndex + i].text = "No Desbloqueado";
-                    availableItemsIcons[firstAvailableItemIndex + i].sprite = lockedItemSprite;
-                    availableItemsDescriptions[firstAvailableItemIndex + i].text = "";
+                    availableItemsNames[i].text = "No Desbloqueado";
+                    availableItemsIcons[i].sprite = lockedItemSprite;
+                    availableItemsDescriptions[i].text = "";
                 }
             }
         }

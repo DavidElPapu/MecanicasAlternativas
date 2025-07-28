@@ -31,7 +31,8 @@ public abstract class TurretDefenseClass : BreakableDefenseClass
         isAttacking = false;
         currentCooldown = 0f;
         damageMultiplier = 1f;
-        currentTarget = null;
+        currentTarget = null; 
+        detectionRange.gameObject.transform.localScale = new Vector3(defenseLevels[currentLevel].range * 2, defenseLevels[currentLevel].range * 2, defenseLevels[currentLevel].range * 2);
     }
     public override void OnPlacing()
     {

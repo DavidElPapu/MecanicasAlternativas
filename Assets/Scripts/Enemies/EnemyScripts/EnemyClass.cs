@@ -184,6 +184,8 @@ public abstract class EnemyClass : MonoBehaviour
     protected virtual void ApplyPoison()
     {
         currentHealth -= poisonDebuff;
+        enemyHealthSlider.value = currentHealth;
+        enemyHealthText.text = currentHealth.ToString();
         if (currentHealth <= 0f)
             OnDeath();
     }
