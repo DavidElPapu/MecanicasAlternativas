@@ -27,6 +27,7 @@ public class ItemSelectionUI : MonoBehaviour
 
     private void Awake()
     {
+        showDefense = true;
         maxAvailableItemSlots = 5;
         firstAvailableItemIndex = 0;
         maxDefenses = playerActions.defenseSlots;

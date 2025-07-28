@@ -9,8 +9,9 @@ public class LevelManager : MonoBehaviour
     public static event Action OnWaveStart;
     public static event Action OnBreakStart;
     public static event Action OnGameLost;
+    public static event Action OnGameWon;
     private int currentWave;
-    private bool isOnBreak, lostGame;
+    private bool isOnBreak, gameStarted;
     [Header("MapGridData")]
     public MapGridDataManager mapGridDataManager;
     public GameObject groundValidDefenseIndicatorsParent, ceilingValidDefenseIndicatorParent;
@@ -32,12 +33,11 @@ public class LevelManager : MonoBehaviour
     [Header("UI")]
     public PlayerMainUI playerUI;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void Awake()
     {
         currentWave = 0;
         isOnBreak = true;
-        lostGame = false;
+        gameStarted = false;
         enemyIndex = 0;
         InitializeMapGrid();
         InitializeEnemySpawner();
@@ -50,7 +50,7 @@ public class LevelManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyUp(KeyCode.Q) && isOnBreak)
+        if (Input.GetKeyUp(KeyCode.Q) && isOnBreak && gameStarted)
         {
             OnWaveContinue();
         }
@@ -58,8 +58,10 @@ public class LevelManager : MonoBehaviour
 
     public void OnGameStart(List<GameObject> selectedDefenses, List<GameObject> selectedGuns)
     {
+        playerUI.OnGameStart();
         playerActions.OnGameStart(selectedDefenses, selectedGuns);
         playerMovement.OnGameStart();
+        gameStarted = true;
     }
 
     public void OnWaveContinue()
@@ -67,8 +69,16 @@ public class LevelManager : MonoBehaviour
         if (isOnBreak)
         {
             currentWave++;
+            if (currentWave > levelData.levelWaves)
+            {
+                WavesEnded();
+                return;
+            }
+            else if (currentWave == levelData.levelWaves)
+                playerUI.ChangeWaveStatus("Oleada Final");
+            else
+                playerUI.ChangeWaveStatus("Oleada " + currentWave.ToString());
             isOnBreak = false;
-            playerUI.ChangeWaveStatus("Oleada " + currentWave.ToString());
             OnWaveStart?.Invoke();
             enemyIndex = 0;
             InvokeRepeating("SpawnEnemies", enemySpawnRate, enemySpawnRate);
@@ -145,7 +155,14 @@ public class LevelManager : MonoBehaviour
 
     public void BaseDied()
     {
+        Debug.Log("Perdiste");
         OnGameLost?.Invoke();
+    }
+
+    public void WavesEnded()
+    {
+        Debug.Log("Ganaste");
+        OnGameWon?.Invoke();
     }
 
     private void OnPlayerDeath()

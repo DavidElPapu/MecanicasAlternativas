@@ -8,12 +8,11 @@ public class PlayerStatus : MonoBehaviour
     public static event Action PlayerDeath;
     public static event Action PlayerRevive;
     [SerializeField] private float currentHealth;
-    private bool isAlive;
 
-    void Start()
+
+    private void Awake()
     {
         currentHealth = maxHealth;
-        isAlive = true;
     }
 
     public void TakeDamage(float damage)
@@ -21,7 +20,6 @@ public class PlayerStatus : MonoBehaviour
         currentHealth -= damage;
         if (currentHealth <= 0)
         {
-            isAlive = false;
             currentHealth = 0;
             PlayerDeath?.Invoke();
         }
@@ -40,13 +38,6 @@ public class PlayerStatus : MonoBehaviour
     {
         currentHealth = maxHealth;
         playerUI.ChangePlayerHealth(currentHealth);
-        isAlive = true;
         PlayerRevive?.Invoke();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

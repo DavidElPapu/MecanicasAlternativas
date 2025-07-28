@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class PlayerMainUI : MonoBehaviour
 {
-    public GameObject deathUI;
+    public GameObject deathUI, mainUI;
     public Slider baseHealthSlider, playerHealthSlider;
     public TextMeshProUGUI baseHealthText, playerHealthText, waveStatusText, enemiesAliveText, moneyText, selectedItemNameText, selectedItemInfoText;
     public Image[] hotbarItemsIcons = new Image[9];
@@ -13,14 +13,9 @@ public class PlayerMainUI : MonoBehaviour
     public Sprite lockedItemSprite;
 
 
-    void Start()
+    public void OnGameStart()
     {
-        
-    }
-
-    void Update()
-    {
-        
+        mainUI.SetActive(true);
     }
 
     public void SetHotbarIcons(Sprite[] icons)
