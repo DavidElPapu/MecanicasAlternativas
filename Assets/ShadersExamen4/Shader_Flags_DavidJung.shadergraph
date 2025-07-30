@@ -1266,7 +1266,7 @@
     "m_ZTestMode": 4,
     "m_ZWriteControl": 0,
     "m_AlphaMode": 0,
-    "m_RenderFace": 2,
+    "m_RenderFace": 0,
     "m_AlphaClip": false,
     "m_CastShadows": true,
     "m_ReceiveShadows": true,
@@ -2513,8 +2513,8 @@
     "m_ObjectId": "692bd299619a4772b1c9175340d8910b",
     "m_Title": "Procedural Flag",
     "m_Position": {
-        "x": -3295.0,
-        "y": -834.0001220703125
+        "x": -3294.999755859375,
+        "y": -833.9999389648438
     }
 }
 
